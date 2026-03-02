@@ -13,20 +13,19 @@
     </p>
 
     <div class="flex flex-col items-center space-y-8">
-      <%# <p>テスト後でこの一文は削除</p> %>
-      <%# <%= link_to genres_path, class: "text-[#4a4a4a] text-sm tracking-widest underline underline-offset-8 hover:text-[#d4a373] transition-colors duration-300" do %> %>
-        <%# アカウント作成せずに試す %>
-      <%# <% end %> %>
+      <%= link_to "#", class: "text-[#4a4a4a] text-sm tracking-widest underline underline-offset-8 hover:text-[#d4a373] transition-colors duration-300" do %>
+        アカウント作成せずに試す
+      <% end %>
 
-      <%# <div class="flex flex-col sm:flex-row gap-4 items-center"> %>
-        <%# <% if user_signed_in? %> %>
-          <%# <%= link_to "マイページ", "#", class: "min-w-[160px] px-8 py-3 bg-[#4a4a4a] text-white text-xs tracking-[2px] hover:opacity-90 transition-all rounded-[2px]" %> %>
-          <%# <%= link_to "ログアウト", destroy_user_session_path, data: { turbo_method: :delete }, class: "text-[#4a4a4a] text-xs border border-[#4a4a4a] px-8 py-3 rounded-[2px] hover:bg-[#4a4a4a] hover:text-white transition-all" %> %>
-        <%# <% else %> %>
-          <%# <%= link_to "ログイン", new_user_session_path, class: "min-w-[160px] px-10 py-4 bg-[#4a4a4a] text-white text-xs font-bold tracking-[2px] hover:translate-y-[-2px] transition-all duration-300 rounded-[2px] shadow-sm" %> %>
+      <div class="flex flex-col sm:flex-row gap-4 items-center">
+        <% if user_signed_in? %>
+          <%= link_to "マイページ", "#", class: "min-w-[160px] px-8 py-3 bg-[#4a4a4a] text-white text-xs tracking-[2px] hover:opacity-90 transition-all rounded-[2px]" %>
+          <%= link_to "ログアウト", destroy_user_session_path, data: { turbo_method: :delete }, class: "text-[#4a4a4a] text-xs border border-[#4a4a4a] px-8 py-3 rounded-[2px] hover:bg-[#4a4a4a] hover:text-white transition-all" %>
+        <% else %>
+          <%= link_to "ログイン", new_user_session_path, class: "min-w-[160px] px-10 py-4 bg-[#4a4a4a] text-white text-xs font-bold tracking-[2px] hover:translate-y-[-2px] transition-all duration-300 rounded-[2px] shadow-sm" %>
           
-          <%# <%= link_to "新規登録", new_user_registration_path, class: "min-w-[160px] px-10 py-4 border border-[#4a4a4a] text-[#4a4a4a] text-xs font-bold tracking-[2px] hover:bg-[#4a4a4a] hover:text-white transition-all duration-300 rounded-[2px]" %> %>
-        <%# <% end %> %>
+          <%= link_to "新規登録", new_user_registration_path, class: "min-w-[160px] px-10 py-4 border border-[#4a4a4a] text-[#4a4a4a] text-xs font-bold tracking-[2px] hover:bg-[#4a4a4a] hover:text-white transition-all duration-300 rounded-[2px]" %>
+        <% end %>
       </div>
     </div>
   </section>

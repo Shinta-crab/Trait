@@ -1,0 +1,72 @@
+<div class="min-h-screen bg-[#f9f7f2] flex flex-col">
+  <%# ヘッダー %>
+  <header class="flex justify-between items-center px-10 h-[60px] flex-shrink-0">
+    <h1 class="font-[300] tracking-[4px] uppercase text-sm">
+      <%= link_to "Trait", root_path, class: "text-[#4a4a4a] no-underline" %>
+    </h1>
+  </header>
+
+  <%# 認証コンテナ %>
+  <main class="flex-grow flex items-center justify-center px-4 py-12">
+    <div class="bg-white p-10 rounded-[4px] shadow-[0_4px_20px_rgba(0,0,0,0.05)] w-full max-w-[400px]">
+      
+      <h2 class="text-2xl font-[300] text-[#4a4a4a] mb-8 text-center tracking-wider">Sign Up</h2>
+
+      <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+        <%# エラーメッセージの表示 %>
+        <%= render "devise/shared/error_messages", resource: resource %>
+
+        <%# 1. アカウント名 (今回の重要カスタマイズ項目) %>
+        <div class="mb-6">
+          <%= f.label :account_name, "Account Name", class: "block text-[12px] mb-1.5 text-[#4a4a4a] tracking-wider uppercase" %>
+          <%= f.text_field :account_name, autofocus: true, placeholder: "アカウント名を入力してください", 
+              class: "w-full p-3 border border-[#ddd] rounded-[4px] text-sm focus:outline-none focus:border-[#4a4a4a] transition-colors" %>
+        </div>
+
+        <%# 2. メールアドレス %>
+        <div class="mb-6">
+          <%= f.label :email, "Email Address", class: "block text-[12px] mb-1.5 text-[#4a4a4a] tracking-wider uppercase" %>
+          <%= f.email_field :email, autocomplete: "email", placeholder: "email@example.com",
+              class: "w-full p-3 border border-[#ddd] rounded-[4px] text-sm focus:outline-none focus:border-[#4a4a4a] transition-colors" %>
+        </div>
+
+        <%# 3. パスワード %>
+        <div class="mb-6">
+          <%= f.label :password, "Password", class: "block text-[12px] mb-1.5 text-[#4a4a4a] tracking-wider uppercase" %>
+          <% if @minimum_password_length %>
+            <em class="text-[10px] text-gray-400 block mb-1">(<%= @minimum_password_length %>文字以上必要です)</em>
+          <% end %>
+          <%= f.password_field :password, autocomplete: "new-password", 
+              class: "w-full p-3 border border-[#ddd] rounded-[4px] text-sm focus:outline-none focus:border-[#4a4a4a] transition-colors" %>
+        </div>
+
+        <%# 4. パスワード確認（Devise標準の必須項目） %>
+        <div class="mb-8">
+          <%= f.label :password_confirmation, "Password Confirmation", class: "block text-[12px] mb-1.5 text-[#4a4a4a] tracking-wider uppercase" %>
+          <%= f.password_field :password_confirmation, autocomplete: "new-password",
+              class: "w-full p-3 border border-[#ddd] rounded-[4px] text-sm focus:outline-none focus:border-[#4a4a4a] transition-colors" %>
+        </div>
+
+        <%# 送信ボタン %>
+        <div class="actions">
+          <%= f.submit "新規登録", class: "w-full py-4 bg-[#4a4a4a] text-white text-[15px] tracking-[2px] cursor-pointer hover:opacity-90 transition-all rounded-[2px] font-bold" %>
+        </div>
+      <% end %>
+
+      <%# フッターリンク %>
+      <div class="mt-8 pt-6 border-t border-gray-100 text-center text-xs text-gray-500">
+        <p>すでにアカウントをお持ちですか？ <%= link_to "ログイン", new_session_path(resource_name), class: "text-[#d4a373] hover:underline" %></p>
+      </div>
+    </div>
+  </main>
+
+  <%# フッター %>
+  <footer class="flex-shrink-0 py-4 text-center border-t border-black/5 text-[12px] bg-[#f9f7f2]">
+    <div class="mb-2">
+      <%= link_to "Home", root_path, class: "mx-4 text-[#333] no-underline hover:text-[#d4a373]" %>
+      <a href="#" class="mx-4 text-[#333] no-underline">利用規約</a>
+      <a href="#" class="mx-4 text-[#333] no-underline">お問い合わせ</a>
+    </div>
+    <p class="text-[10px] text-gray-400">&copy; 2026 Trait</p>
+  </footer>
+</div>
