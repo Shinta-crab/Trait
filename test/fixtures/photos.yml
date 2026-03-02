@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  genre: one
+  main_style: one
+  image_path: MyString
+  is_representative: false
+
+two:
+  genre: two
+  main_style: two
+  image_path: MyString
+  is_representative: false

@@ -1,0 +1,2 @@
+class Axis < ApplicationRecord
+end
