@@ -1,0 +1,48 @@
+<div class="min-h-screen bg-[#f9f7f2] flex flex-col">
+  <%# ヘッダーセクション %>
+  <header class="flex justify-between items-center px-10 h-[60px] flex-shrink-0">
+    <h1 class="font-[300] tracking-[4px] uppercase text-sm">
+      <%= link_to "Trait", root_path, class: "text-[#4a4a4a] no-underline" %>
+    </h1>
+  </header>
+
+  <main class="max-w-[900px] mx-auto py-[60px] px-5 text-center flex-grow">
+    <%# イントロダクション %>
+    <section class="mb-[50px]">
+      <span class="block text-[11px] tracking-[0.25em] text-[#d4a373] uppercase font-bold mb-2 italic">
+        Step 01
+      </span>
+      <h2 class="text-2xl font-[300] text-[#4a4a4a] mb-2.5">どの空間を整えますか？</h2>
+      <p class="text-sm text-[#888] leading-relaxed">
+        診断したい場所を選んでください。<br class="sm:hidden">AIがその空間に適した画像を厳選します。
+      </p>
+    </section>
+
+    <%# ジャンルグリッド %>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">      <% @genres.each do |genre| %>
+        <%# 今後はこのリンク先を、写真スワイプ画面（例: genre_photos_path(genre)）へ繋げます %>
+        <%= link_to "#", class: "group bg-white border border-[#e5e0d8] p-10 flex flex-col items-center rounded-[2px] transition-all duration-400 ease-[cubic-bezier(0.165,0.84,0.44,1)] hover:-translate-y-1.5 hover:border-[#d4a373] hover:shadow-[0_10px_30px_rgba(0,0,0,0.03)]" do %>
+          <div class="text-[32px] mb-[15px] opacity-80 group-hover:scale-110 transition-transform">
+            <%= genre.icon %>
+          </div>
+          <h3 class="text-xl mb-[5px] tracking-wider text-[#333] font-normal uppercase">
+            <%= genre.slug %>
+          </h3>
+          <span class="text-[12px] text-[#999]">
+            <%= genre.name %>
+          </span>
+        <% end %>
+      <% end %>
+    </div>
+  </main>
+
+  <%# フッター %>
+  <footer class="flex-shrink-0 py-4 text-center border-t border-black/5 text-[12px] bg-[#f9f7f2]">
+    <div class="mb-2">
+      <%= link_to "Home", root_path, class: "mx-4 text-[#333] no-underline hover:text-[#d4a373]" %>
+      <a href="#" class="mx-4 text-[#333] no-underline">利用規約</a>
+      <a href="#" class="mx-4 text-[#333] no-underline">お問い合わせ</a>
+    </div>
+    <p class="text-[10px] text-gray-400">&copy; 2026 Trait</p>
+  </footer>
+</div>
