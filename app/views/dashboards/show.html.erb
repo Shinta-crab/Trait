@@ -1,0 +1,41 @@
+<div class="min-h-screen bg-[#f9f7f2] p-8">
+  <div class="max-w-6xl mx-auto">
+    <header class="flex justify-between items-center mb-12">
+      <div>
+        <h1 class="text-2xl font-[300] text-[#4a4a4a] tracking-widest uppercase">My Dashboard</h1>
+        <p class="text-sm text-gray-500 mt-1">こんにちは、<%= current_user.account_name %> さん</p>
+      </div>
+      <%= link_to "ログアウト", destroy_user_session_path, data: { turbo_method: :delete }, class: "text-xs text-gray-400 hover:text-black" %>
+    </header>
+
+    <%# <div class="grid grid-cols-1 md:grid-cols-3 gap-8"> %>
+      <%# <% if @my_styles.any? %> %>
+        <%# <% @my_styles.each do |style| %> %>
+          <%# <div class="bg-white rounded-sm shadow-sm overflow-hidden border border-black/5 hover:shadow-md transition"> %>
+            <%# スタイルの代表画像（選抜された最初の1枚を表示） %>
+            <%# <% first_photo = style.my_style_selections.where(is_selected: true).first&.photo %> %>
+            <%# <% if first_photo %> %>
+              <%# <div class="aspect-[4/3] bg-cover bg-center" style="background-image: url('<%= first_photo.display_image_url %>')"></div> %>
+            <%# <% else %> %>
+              <%# <div class="aspect-[4/3] bg-stone-200 flex items-center justify-center text-stone-400">No Image</div> %>
+            <%# <% end %> %>
+
+            <%# <div class="p-4"> %>
+              <%# <span class="text-[10px] text-[#d4a373] font-bold uppercase tracking-widest"><%= style.genre.name %></span> %>
+              <%# <h3 class="text-lg font-[300] text-[#4a4a4a] mt-1"><%= style.custom_name %></h3> %>
+              <%# <div class="mt-4 flex justify-between items-center"> %>
+                <%# <span class="text-[10px] text-gray-400"><%= style.created_at.strftime("%Y.%m.%d") %></span> %>
+                <%# <%= link_to "View Detail", "#", class: "text-[11px] text-[#4a4a4a] underline uppercase tracking-tighter" %> %>
+              <%# </div> %>
+            <%# </div> %>
+          <%# </div> %>
+        <%# <% end %> %>
+      <%# <% else %> %>
+        <%# <div class="col-span-full py-20 text-center bg-white/50 border-2 border-dashed border-stone-200 rounded"> %>
+          <%# <p class="text-stone-400 text-sm">保存されたスタイルはまだありません。</p> %>
+          <%# <%= link_to "診断をはじめる", "#", class: "mt-4 inline-block px-6 py-2 bg-stone-800 text-white text-xs rounded-full" %> %>
+        <%# </div> %>
+      <%# <% end %> %>
+    <%# </div> %>
+  <%# </div> %>
+</div>

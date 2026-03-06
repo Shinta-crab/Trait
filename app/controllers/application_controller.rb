@@ -13,4 +13,9 @@ class ApplicationController < ActionController::Base
     # アカウント編集時にも許可したい場合
     devise_parameter_sanitizer.permit(:account_update, keys: [:account_name, :email, :password, :password_confirmation])
   end
+
+  #  ログイン（新規登録後の自動ログイン含む）の遷移先を指定
+  def after_sign_in_path_for(resource)
+    dashboard_path # /dashboard へ
+  end
 end
