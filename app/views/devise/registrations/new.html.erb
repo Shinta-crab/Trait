@@ -12,7 +12,7 @@
       
       <h2 class="text-2xl font-[300] text-[#4a4a4a] mb-8 text-center tracking-wider">Sign Up</h2>
 
-      <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+      <%= form_for(resource, as: resource_name, url: registration_path(resource_name), data: { turbo: false }) do |f| %>
         <%# エラーメッセージの表示 %>
         <%= render "devise/shared/error_messages", resource: resource %>
 
