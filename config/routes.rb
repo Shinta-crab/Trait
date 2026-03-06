@@ -11,9 +11,16 @@ Rails.application.routes.draw do
   
   # 2. ジャンル選択ページ
   # 「/genres」にアクセスした時にジャンル一覧が出るようにします
-  resources :genres, only: [:index]
+  resources :genres, only: [:index] do
     member do
       get :main
+    end
+  end
+
+  # 3. 写真描画のためのルーティング
+  resources :likes, only: [:create] do
+    collection do
+      delete :destroy_by_photo # 写真IDを指定して削除するためのカスタムルート
     end
   end
 

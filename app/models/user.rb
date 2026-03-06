@@ -4,6 +4,9 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
+  has_many :likes, dependent: :destroy
+  has_many :liked_photos, through: :likes, source: :photo
+  
   # アカウント名のバリデーションを追加
   validates :account_name, presence: true, uniqueness: true
 end
