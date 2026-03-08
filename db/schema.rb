@@ -10,9 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_03_02_124815) do
+ActiveRecord::Schema[7.2].define(version: 2026_03_06_144807) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "analysis_results", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.datetime "analyzed_at", default: -> { "CURRENT_TIMESTAMP" }
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_analysis_results_on_user_id"
+  end
 
   create_table "axes", force: :cascade do |t|
     t.string "name", null: false
@@ -33,11 +41,45 @@ ActiveRecord::Schema[7.2].define(version: 2026_03_02_124815) do
     t.index ["slug"], name: "index_genres_on_slug", unique: true
   end
 
+  create_table "likes", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "photo_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["photo_id"], name: "index_likes_on_photo_id"
+    t.index ["user_id"], name: "index_likes_on_user_id"
+  end
+
   create_table "main_styles", force: :cascade do |t|
     t.string "name"
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "my_style_selections", force: :cascade do |t|
+    t.bigint "my_style_id", null: false
+    t.bigint "photo_id", null: false
+    t.integer "pos_x", null: false
+    t.integer "pos_y", null: false
+    t.boolean "is_selected", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["my_style_id"], name: "index_my_style_selections_on_my_style_id"
+    t.index ["photo_id"], name: "index_my_style_selections_on_photo_id"
+  end
+
+  create_table "my_styles", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "genre_id", null: false
+    t.bigint "analysis_result_id", null: false
+    t.string "custom_name", default: "My Style"
+    t.integer "style_type", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["analysis_result_id"], name: "index_my_styles_on_analysis_result_id"
+    t.index ["genre_id"], name: "index_my_styles_on_genre_id"
+    t.index ["user_id"], name: "index_my_styles_on_user_id"
   end
 
   create_table "photo_scores", force: :cascade do |t|
@@ -76,6 +118,14 @@ ActiveRecord::Schema[7.2].define(version: 2026_03_02_124815) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "analysis_results", "users"
+  add_foreign_key "likes", "photos"
+  add_foreign_key "likes", "users"
+  add_foreign_key "my_style_selections", "my_styles"
+  add_foreign_key "my_style_selections", "photos"
+  add_foreign_key "my_styles", "analysis_results"
+  add_foreign_key "my_styles", "genres"
+  add_foreign_key "my_styles", "users"
   add_foreign_key "photo_scores", "axes"
   add_foreign_key "photo_scores", "photos"
   add_foreign_key "photos", "genres"

@@ -1,0 +1,20 @@
+<div class="container mx-auto px-4 py-8">
+  <h1 class="text-3xl font-bold text-center mb-8"><%= @genre.name %>のスタイル診断結果</h1>
+
+  <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+    <% @selected_photos.each do |photo| %>
+      <div class="rounded-lg overflow-hidden shadow-lg bg-white">
+        <img src="<%= photo.image_path %>" class="w-full h-48 object-cover">
+        <div class="p-2 text-xs text-gray-500">
+          <%# セッションからこの写真のスコアを探して表示する例 %>
+          <% score = @selections.find { |s| s["photo_id"].to_i == photo.id } %>
+          スコア: X(<%= score["pos_x"] %>) Y(<%= score["pos_y"] %>)
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="text-center mt-12">
+    <%= link_to "もう一度診断する", root_path, class: "bg-gray-500 text-white px-6 py-2 rounded" %>
+  </div>
+</div>

@@ -14,14 +14,14 @@
       </span>
       <h2 class="text-2xl font-[300] text-[#4a4a4a] mb-2.5">どの空間を整えますか？</h2>
       <p class="text-sm text-[#888] leading-relaxed">
-        診断したい場所を選んでください。<br class="sm:hidden">AIがその空間に適した画像を厳選します。
+        診断したい場所を選んでください。<br class="sm:hidden">その空間に適した画像を厳選します。
       </p>
     </section>
 
     <%# ジャンルグリッド %>
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">      <% @genres.each do |genre| %>
         <%# 今後はこのリンク先を、写真スワイプ画面（例: genre_photos_path(genre)）へ繋げます %>
-        <%= link_to "#", class: "group bg-white border border-[#e5e0d8] p-10 flex flex-col items-center rounded-[2px] transition-all duration-400 ease-[cubic-bezier(0.165,0.84,0.44,1)] hover:-translate-y-1.5 hover:border-[#d4a373] hover:shadow-[0_10px_30px_rgba(0,0,0,0.03)]" do %>
+        <%= link_to "main_genre_path(genre)", class: "group bg-white border border-[#e5e0d8] p-10 flex flex-col items-center rounded-[2px] transition-all duration-400 ease-[cubic-bezier(0.165,0.84,0.44,1)] hover:-translate-y-1.5 hover:border-[#d4a373] hover:shadow-[0_10px_30px_rgba(0,0,0,0.03)]" do %>
           <div class="text-[32px] mb-[15px] opacity-80 group-hover:scale-110 transition-transform">
             <%= genre.icon %>
           </div>

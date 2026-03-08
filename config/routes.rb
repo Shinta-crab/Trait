@@ -24,6 +24,11 @@ Rails.application.routes.draw do
     end
   end
 
+  # 4. 解析結果保存のためのルーティング
+  resources :analysis_results, only: [:create]
+
+  # 5. マイスタイル表示のためルーティング
+
   # 以下、Rails標準の設定
   get "up" => "rails/health#show", as: :rails_health_check
   get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
