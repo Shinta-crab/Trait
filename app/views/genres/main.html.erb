@@ -10,7 +10,6 @@
       <div class="flex items-center gap-2">
         <span>縦軸:</span>
         <select data-action="change->diagnostics#updatePositions" data-diagnostics-target="ySelect" class="bg-transparent border-b border-[#4a4a4a] outline-none">
-          <%# モックアップに合わせてvalueを修正 %>
           <option value="natural_artificial">ナチュラル - 人工的</option>
           <option value="soft_solid" selected>柔らかい - クール</option>
           <option value="tradition_modern">伝統的 - 先進的</option>
@@ -19,9 +18,8 @@
       <div class="flex items-center gap-2">
         <span>横軸:</span>
         <select data-action="change->diagnostics#updatePositions" data-diagnostics-target="xSelect" class="bg-transparent border-b border-[#4a4a4a] outline-none">
-          <%# モックアップに合わせてvalueを修正 %>
           <option value="luxury_casual">高級感 - 親しみやすい</option>
-          <option value="simple_detail"selected>ディテール - シンプル</option>
+          <option value="simple_detail" selected>ディテール - シンプル</option>
           <option value="chic_pop">シック - ポップ</option>
         </select>
       </div>
@@ -31,7 +29,7 @@
   <%# --- スワイプセクション --- %>
   <section data-diagnostics-target="swipeSection" class="flex-grow flex flex-col justify-center py-10">
     <div class="section-header text-center mb-8 max-w-[700px] mx-auto px-5">
-      <span class="step-label text-[#d4a373] text-[11px] font-bold tracking-widest uppercase block mb-2">Step 02</span>
+      <span class="block text-[11px] tracking-[0.25em] text-[#d4a373] uppercase font-bold mb-2 italic">Step 02</span>
       <h2 class="text-2xl font-[300] text-[#4a4a4a] mb-2">自分の好きを見つけよう</h2>
       <p class="text-sm text-gray-400">直感で好き嫌いに振り分けてください。</p>
     </div>
@@ -50,7 +48,6 @@
                data-diagnostics-target="card"
                data-id="<%= photo.id %>"
                data-image-url="<%= photo.display_image_url %>"
-               <%# 前回の修正を反映: axis.name を使用 %>
                data-scores='<%= photo.photo_scores.map { |ps| [ps.axis.name, ps.score] }.to_h.to_json %>'>
           </div>
         <% end %>
@@ -65,10 +62,10 @@
     <p class="guide-text text-center text-[10px] text-gray-400 mt-8 tracking-widest uppercase">← Dislike (左キー) | Like (右キー) →</p>
   </section>
 
-  <%# --- マッピングセクション（初期非表示） --- %>
+  <%# --- マッピングセクション --- %>
   <section data-diagnostics-target="mappingSection" class="hidden flex-grow flex flex-col justify-center py-10">
     <div class="section-header text-center mb-10 max-w-[700px] mx-auto px-5">
-      <span class="step-label text-[#d4a373] text-[11px] font-bold tracking-widest uppercase block mb-2">Step 03</span>
+      <span class="block text-[11px] tracking-[0.25em] text-[#d4a373] uppercase font-bold mb-2 italic">Step 03</span>
       <h2 class="text-2xl font-[300] text-[#4a4a4a] mb-2">好きの輪郭を確認する</h2>
       <p class="text-sm text-gray-400">配置された画像があなたの好みの分布です。<br>サークル（塊）をクリックして、スタイルを確定させましょう。</p>
     </div>
@@ -77,16 +74,16 @@
     <div class="grid-canvas relative w-[70vw] h-[50vh] mx-auto border border-black/5" 
          style="background-image: linear-gradient(rgba(0,0,0,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.05) 1px, transparent 1px); background-size: 40px 40px;">
       
-      <%# 中央の軸線（モックアップ風） %>
       <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-30">
         <div class="w-full h-[1px] bg-[#4a4a4a]"></div>
         <div class="h-full w-[1px] bg-[#4a4a4a] absolute"></div>
       </div>
       
-      <svg class="absolute inset-0 w-full h-full pointer-events-none z-10" data-diagnostics-target="svg"></svg>
-      <div data-diagnostics-target="plottedCards" class="absolute inset-0"></div>
+      <%# 修正点：pointer-events-none を削除。z-indexを調整 %>
+      <svg class="absolute inset-0 w-full h-full z-20" data-diagnostics-target="svg"></svg>
+      <div data-diagnostics-target="plottedCards" class="absolute inset-0 z-10"></div>
       
-      <%# --- マップのラベル（軸の延長線上に配置） --- %>
+      <%# ラベル類 %>
       <div class="absolute inset-x-0 -top-[30px] h-[30px] flex items-center justify-center">
         <div data-diagnostics-target="labelYMax" class="font-bold text-[13px] text-[#4a4a4a] bg-[#f9f7f2]/80 px-2 py-1 rounded"></div>
       </div>
@@ -110,7 +107,7 @@
 
   <footer class="py-4 text-center border-t border-black/5 text-[10px] text-gray-400 mt-auto">
     <div class="footer-links mb-1 text-[#333]">
-        <a href="#" class="mx-3 hover:underline">Home</a>
+        <%= link_to "Home", root_path, class: "mx-3 hover:underline" %>
         <a href="#" class="mx-3 hover:underline">利用規約</a>
         <a href="#" class="mx-3 hover:underline">お問い合わせ</a>
     </div>

@@ -28,6 +28,7 @@ Rails.application.routes.draw do
   resources :analysis_results, only: [:create]
 
   # 5. マイスタイル表示のためルーティング
+  resources :my_styles, only: [:new, :create, :show, :index, :destroy]
 
   # 以下、Rails標準の設定
   get "up" => "rails/health#show", as: :rails_health_check

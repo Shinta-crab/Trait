@@ -16,6 +16,6 @@ class ApplicationController < ActionController::Base
 
   #  ログイン（新規登録後の自動ログイン含む）の遷移先を指定
   def after_sign_in_path_for(resource)
-    dashboard_path # /dashboard へ
+    user_root_path # /dashboard へ
   end
 end

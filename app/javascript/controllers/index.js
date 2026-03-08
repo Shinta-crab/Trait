@@ -9,3 +9,9 @@ application.register("diagnostics", DiagnosticsController)
 
 import HelloController from "./hello_controller"
 application.register("hello", HelloController)
+
+import SelectionController from "./selection_controller"
+application.register("selection", SelectionController)
+
+import StyleSelectionController from "./style_selection_controller"
+application.register("style-selection", StyleSelectionController)
