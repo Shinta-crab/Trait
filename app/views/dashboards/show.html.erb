@@ -9,32 +9,42 @@
     </header>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-      <% if @my_styles.any? %>
-        <% @my_styles.each do |style| %>
-          <div class="bg-white rounded-sm shadow-sm overflow-hidden border border-black/5 hover:shadow-md transition">
-            <%# スタイルの代表画像（選抜された最初の1枚を表示） %>
-            <% first_photo = style.my_style_selections.where(is_selected: true).first&.photo %>
-            <% if first_photo %>
-              <div class="aspect-[4/3] bg-cover bg-center" style="background-image: url('<%= first_photo.display_image_url %>')"></div>
-            <% else %>
-              <div class="aspect-[4/3] bg-stone-200 flex items-center justify-center text-stone-400">No Image</div>
-            <% end %>
+      <%# 保存済みスタイル一覧 %>
+      <% @my_styles.each do |style| %>
+        <div class="bg-white rounded-sm shadow-sm overflow-hidden border border-black/5 flex flex-col group">
+          <% first_photo = style.selected_photos.first %>
+          <% if first_photo %>
+            <div class="aspect-[4/3] bg-cover bg-center" style="background-image: url('<%= first_photo.display_image_url %>')">
+              <div class="m-2 inline-block px-2 py-1 bg-black/50 text-white text-[9px] uppercase tracking-widest"><%= style.genre.name %></div>
+            </div>
+          <% else %>
+            <div class="aspect-[4/3] bg-stone-200 flex items-center justify-center text-stone-400">No Image</div>
+          <% end %>
 
-            <div class="p-4">
-              <span class="text-[10px] text-[#d4a373] font-bold uppercase tracking-widest"><%= style.genre.name %></span>
-              <h3 class="text-lg font-[300] text-[#4a4a4a] mt-1"><%= style.custom_name %></h3>
-              <div class="mt-4 flex justify-between items-center">
-                <span class="text-[10px] text-gray-400"><%= style.created_at.strftime("%Y.%m.%d") %></span>
-                <%= link_to "View Detail", my_style_path(style), class: "text-[11px] text-[#4a4a4a] underline uppercase tracking-tighter" %>
-              </div>
+          <div class="p-4 flex-grow flex flex-col justify-between">
+            <div>
+              <h3 class="text-lg font-[300] text-[#4a4a4a]"><%= style.custom_name %></h3>
+              <p class="text-[10px] text-gray-400 mt-1"><%= style.created_at.strftime("%Y.%m.%d") %></p>
+            </div>
+            
+            <div class="mt-6 flex justify-between items-center pt-4 border-t border-gray-50">
+              <%= link_to "View Detail", my_style_path(style), class: "text-[11px] text-[#4a4a4a] underline uppercase tracking-tighter" %>
+              
+              <%# 💡 削除ボタン: data-turbo-method と confirm を使用 %>
+              <%= link_to "Delete", my_style_path(style), 
+                  data: { turbo_method: :delete, turbo_confirm: "このスタイルを削除してもよろしいですか？" }, 
+                  class: "text-[10px] text-red-300 hover:text-red-500 transition uppercase tracking-widest" %>
             </div>
           </div>
-        <% end %>
-      <% else %>
-        <div class="col-span-full py-20 text-center bg-white/50 border-2 border-dashed border-stone-200 rounded">
-          <p class="text-stone-400 text-sm">保存されたスタイルはまだありません。</p>
-          <%= link_to "診断をはじめる", genres_path, class: "mt-4 inline-block px-6 py-2 bg-stone-800 text-white text-xs rounded-full" %>
         </div>
+      <% end %>
+
+      <%# 空きスロット（追加ボタン） %>
+      <% @empty_slots_count.times do %>
+        <%= link_to genres_path, class: "group bg-white/40 border-2 border-dashed border-stone-200 rounded-sm aspect-[4/3] flex flex-col items-center justify-center hover:border-stone-400 hover:bg-white transition" do %>
+          <span class="text-3xl text-stone-300 group-hover:text-stone-500 mb-1 font-[100]">+</span>
+          <p class="text-[9px] text-stone-400 group-hover:text-stone-600 uppercase tracking-[0.2em]">New Analysis</p>
+        <% end %>
       <% end %>
     </div>
   </div>
