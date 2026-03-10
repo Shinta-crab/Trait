@@ -19,21 +19,37 @@
     </section>
 
     <%# ジャンルグリッド %>
-    <%# grid-cols-1 (スマホ: 1列) %>
-    <%# sm:grid-cols-2 (タブレット: 2列) %>
-    <%# md:grid-cols-3 (PC: 3列固定) %>
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
       <% @genres.each do |genre| %>
-        <%= link_to main_genre_path(genre), class: "group bg-white border border-[#e5e0d8] p-10 flex flex-col items-center rounded-[2px] transition-all duration-400 ease-[cubic-bezier(0.165,0.84,0.44,1)] hover:-translate-y-1.5 hover:border-[#d4a373] hover:shadow-[0_10px_30px_rgba(0,0,0,0.03)]" do %>
-          <div class="text-[32px] mb-[15px] opacity-80 group-hover:scale-110 transition-transform">
-            <%= genre.icon %>
+        <% if genre.slug == 'living' %>
+          <%# リビングの場合：リンク有効 %>
+          <%= link_to main_genre_path(genre), class: "group bg-white border border-[#e5e0d8] p-10 flex flex-col items-center rounded-[2px] transition-all duration-400 ease-[cubic-bezier(0.165,0.84,0.44,1)] hover:-translate-y-1.5 hover:border-[#d4a373] hover:shadow-[0_10px_30px_rgba(0,0,0,0.03)]" do %>
+            <div class="text-[32px] mb-[15px] opacity-80 group-hover:scale-110 transition-transform">
+              <%= genre.icon %>
+            </div>
+            <h3 class="text-xl mb-[5px] tracking-wider text-[#333] font-normal uppercase">
+              <%= genre.slug %>
+            </h3>
+            <span class="text-[12px] text-[#999]">
+              <%= genre.name %>
+            </span>
+          <% end %>
+        <% else %>
+          <%# それ以外の場合：グレーアウト＆メンテナンス中表示 %>
+          <div class="relative bg-white border border-[#e5e0d8] p-10 flex flex-col items-center rounded-[2px] opacity-60 grayscale cursor-not-allowed">
+            <div class="absolute inset-0 flex flex-col items-center justify-center bg-white/60 z-10">
+              <span class="bg-stone-800 text-white text-[10px] px-3 py-1 tracking-widest uppercase">メンテナンス中</span>
+            </div>
+            <div class="text-[32px] mb-[15px] opacity-50">
+              <%= genre.icon %>
+            </div>
+            <h3 class="text-xl mb-[5px] tracking-wider text-[#333] font-normal uppercase">
+              <%= genre.slug %>
+            </h3>
+            <span class="text-[12px] text-[#999]">
+              <%= genre.name %>
+            </span>
           </div>
-          <h3 class="text-xl mb-[5px] tracking-wider text-[#333] font-normal uppercase">
-            <%= genre.slug %>
-          </h3>
-          <span class="text-[12px] text-[#999]">
-            <%= genre.name %>
-          </span>
         <% end %>
       <% end %>
     </div>
