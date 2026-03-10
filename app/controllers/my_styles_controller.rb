@@ -1,12 +1,11 @@
 class MyStylesController < ApplicationController
-  before_action :authenticate_user!, except: [:new]
+  before_action :authenticate_user!, only: [:create, :update, :destroy, :index, :show]
 
   # 1. プレビュー表示画面（診断直後）
   def new
     if params[:photo_ids].present?
       @genre = Genre.find(params[:genre_id])
       @selected_photos = Photo.where(id: params[:photo_ids].split(','))
-      
       @all_photo_ids = params[:all_photo_ids]
       @cx = params[:cx]
       @cy = params[:cy]
@@ -19,13 +18,13 @@ class MyStylesController < ApplicationController
 
   # 2. 保存処理 (上限5件チェック付き)
   def create
+    # 念のためここでもチェック。ログインしていない場合は401を返す
     unless user_signed_in?
       return render json: { status: 'unauthorized', message: '保存にはログインが必要です。' }, status: :unauthorized
     end
 
-    # 5件上限のチェック
     if current_user.my_styles.count >= 5
-      return render json: { status: 'error', message: '保存できるスタイルは最大5件までです。不要なスタイルを削除してから保存してください。' }, status: :unprocessable_entity
+      return render json: { message: '保存できるスタイルは最大5件までです。不要なスタイルを削除してから保存してください。' }, status: :unprocessable_entity
     end
 
     ActiveRecord::Base.transaction do
@@ -46,7 +45,6 @@ class MyStylesController < ApplicationController
         selected_ids = params[:photo_ids].to_s.split(',').map(&:to_i)
 
         all_ids.each do |p_id|
-          # selections に座標（pos_x, pos_y）を保存
           MyStyleSelection.create!(
             my_style: @my_style,
             photo_id: p_id,
@@ -58,7 +56,7 @@ class MyStylesController < ApplicationController
       end
     end
 
-    render json: { status: 'success', redirect_url: '/dashboard' }
+    render json: { status: 'success', redirect_url: user_root_path }
   rescue => e
     logger.error "MyStyle Save Error: #{e.message}"
     render json: { status: 'error', message: e.message }, status: :unprocessable_entity

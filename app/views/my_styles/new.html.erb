@@ -1,5 +1,6 @@
 <div class="min-h-screen bg-[#f9f7f2] flex flex-col" 
      data-controller="style-selection" 
+     data-style-selection-authenticated-value="<%= user_signed_in? %>"
      data-style-selection-photo-ids-value="<%= params[:photo_ids] %>" 
      data-style-selection-all-photo-ids-value="<%= params[:all_photo_ids] %>" 
      data-style-selection-genre-id-value="<%= params[:genre_id] %>"
@@ -21,7 +22,7 @@
       <p class="text-sm text-gray-400">抽出された画像から、あなたの理想を言語化しましょう。</p>
       
       <div class="naming-form mt-6 max-w-md mx-auto">
-        <%# Targetを指定 %>
+        <%# 🆕 Targetを指定 %>
         <input type="text" 
                data-style-selection-target="nameInput" 
                class="w-full border-b-2 border-stone-300 py-2 text-center focus:border-stone-500 outline-none bg-transparent" 

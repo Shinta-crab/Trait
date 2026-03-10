@@ -2,11 +2,9 @@ import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   static targets = ["nameInput"]
-  
-  // 💡 HTML側の data-style-selection-all-photo-ids-value は JS側で allPhotoIdsValue になります
   static values = {
-    photoIds: String,
-    allPhotoIds: String,
+    photoIds: String,    
+    allPhotoIds: String, 
     genreId: Number,
     cx: Number,
     cy: Number,
@@ -14,56 +12,53 @@ export default class extends Controller {
     yAxis: String
   }
 
-  async save(event) {
+  // 保存ボタンがクリックされた時の処理
+  save(event) {
     event.preventDefault()
-    
-    // デバッグ用：クリックされたことを確認
-    console.log("Save button clicked!")
-    
+
     const styleName = this.nameInputTarget.value
-    
-    // 送信データの確認（コンソールで値が入っているか見てください）
-    const payload = { 
-      custom_name: styleName,
-      photo_ids: this.photoIdsValue,
-      all_photo_ids: this.allPhotoIdsValue, 
-      genre_id: this.genreIdValue,
-      cx: this.cxValue,                     
-      cy: this.cyValue,                     
-      x_axis: this.xAxisValue,              
-      y_axis: this.yAxisValue               
-    }
-    console.log("Payload:", payload)
 
-    try {
-      const response = await fetch('/my_styles', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRF-Token': this.getCsrfToken()
-        },
-        body: JSON.stringify(payload)
+    fetch('/my_styles', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json', // JSONレスポンスを明確に要求
+        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
+      },
+      body: JSON.stringify({ 
+        custom_name: styleName,
+        photo_ids: this.photoIdsValue,
+        all_photo_ids: this.allPhotoIdsValue,
+        genre_id: this.genreIdValue,
+        cx: this.cxValue,
+        cy: this.cyValue,
+        x_axis: this.xAxisValue,
+        y_axis: this.yAxisValue
       })
-
-      const data = await response.json()
-
+    })
+    .then(async response => {
+      // 401 Unauthorized を検知
       if (response.status === 401) {
-        alert("保存にはログインが必要です。")
-        window.location.href = '/users/sign_up'
-      } else if (response.ok) {
-        console.log("Save success, redirecting...")
-        window.location.href = '/dashboard'
-      } else {
-        throw new Error(data.message || "保存中にエラーが発生しました")
+        alert("スタイルの保存には新規アカウント登録、ログインが必要です。")
+        window.location.href = '/'
+        return null
       }
-    } catch (error) {
-      console.error("Save Error:", error)
-      alert("エラーが発生しました: " + error.message)
-    }
-  }
+      
+      // それ以外は通常通りJSONとして解析
+      return response.json()
+    })
+    .then(data => {
+      if (!data) return // 401で中断された場合は何もしない
 
-  getCsrfToken() {
-    const tokenTag = document.querySelector('meta[name="csrf-token"]')
-    return tokenTag ? tokenTag.content : ""
+      if (data.status === 'success') {
+        window.location.href = data.redirect_url || '/dashboard'
+      } else {
+        alert("エラーが発生しました: " + (data.message || "不明なエラー"))
+      }
+    })
+    .catch(error => {
+      console.error("Error:", error)
+      alert("通信に失敗しました。再度お試しください。")
+    })
   }
 }
