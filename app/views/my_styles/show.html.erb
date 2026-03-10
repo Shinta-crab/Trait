@@ -13,7 +13,6 @@
   </header>
 
   <main class="container mx-auto px-6 py-12 max-w-5xl">
-    <%# --- セクション1: スタイル表示 --- %>
     <div data-style-analysis-target="mainView">
       <section class="text-center mb-16">
         <span class="text-[10px] text-[#d4a373] font-bold uppercase tracking-[0.3em] mb-3 block"><%= @genre.name %> / Saved Style</span>
@@ -41,7 +40,6 @@
       </section>
     </div>
 
-    <%# --- セクション2: 4象限マップ --- %>
     <div data-style-analysis-target="mapView" class="hidden animate-fade-in">
       <section class="mb-10 text-center">
         <h2 class="text-2xl font-[200] text-[#4a4a4a] mb-8 uppercase tracking-widest">Map Analysis</h2>
@@ -61,17 +59,18 @@
           </div>
         </div>
 
-        <%# グリッドキャンバス %>
         <div class="relative w-[70vw] h-[50vh] max-w-3xl mx-auto border border-black/5" 
              style="background-image: linear-gradient(rgba(0,0,0,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.05) 1px, transparent 1px); background-size: 40px 40px;">
           <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-30">
             <div class="w-full h-[1px] bg-[#4a4a4a]"></div>
             <div class="h-full w-[1px] bg-[#4a4a4a] absolute"></div>
           </div>
-          <svg class="absolute inset-0 w-full h-full z-20" data-style-analysis-target="svg"></svg>
-          <div data-style-analysis-target="plottedCards" class="absolute inset-0 z-10"></div>
           
-          <%# 軸ラベル %>
+          <div data-style-analysis-target="plottedCards" class="absolute inset-0 z-10"></div>
+          <div data-style-analysis-target="circleContainer" class="absolute inset-0 z-20 transition-opacity duration-700 opacity-100">
+            <svg class="w-full h-full" data-style-analysis-target="svg"></svg>
+          </div>
+          
           <div data-style-analysis-target="labelYMax" class="absolute -top-[30px] inset-x-0 text-[11px] font-bold"></div>
           <div data-style-analysis-target="labelYMin" class="absolute -bottom-[30px] inset-x-0 text-[11px] font-bold"></div>
           <div data-style-analysis-target="labelXMin" class="absolute -left-[70px] inset-y-0 w-[70px] flex items-center justify-center text-[11px] font-bold whitespace-nowrap"></div>

@@ -3,8 +3,8 @@ import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
   static targets = [
     "mainView", "mapView", "nameDisplay", "nameInput", "editInterface", 
-    "plottedCards", "svg", "xSelect", "ySelect",
-    "labelXMin", "labelXMax", "labelYMin", "labelYMax" // 追加しました
+    "plottedCards", "svg", "xSelect", "ySelect", "circleContainer",
+    "labelXMin", "labelXMax", "labelYMin", "labelYMax"
   ]
   static values = { 
     styleId: Number,
@@ -15,25 +15,21 @@ export default class extends Controller {
 
   connect() {
     this.labelMap = {
-      'luxury_casual': ['高級感', '親しみやすい'],
-      'natural_artificial': ['ナチュラル', '人工的'],
+      'luxury_casual': ['親しみやすい', '高級感'],
+      'natural_artificial': ['人工的', 'ナチュラル感'],
       'simple_detail': ['シンプル', 'ディテール'],
-      'soft_solid': ['柔らかい', 'クール'],
-      'tradition_modern': ['伝統的', '先進的'],
-      'chic_pop': ['シック', 'ポップ']
+      'soft_solid': ['クール', '柔らかい・優しい'],
+      'tradition_modern': ['先進的', '伝統的'],
+      'chic_pop': ['ポップ', 'シック']
     }
-    // connectではマップ表示に必要な処理は行わず、手動でshowMap経由で行う
   }
 
-  // マップを表示し、アニメーションを開始
   showMap() {
     this.mainViewTarget.classList.add("hidden")
     this.mapViewTarget.classList.remove("hidden")
-    // ここで初めてターゲットが存在する状態で計算する
     this.updatePositions()
   }
 
-  // グリッド表示に戻す
   hideMap() {
     this.mapViewTarget.classList.add("hidden")
     this.mainViewTarget.classList.remove("hidden")
@@ -65,14 +61,21 @@ export default class extends Controller {
   }
 
   updatePositions() {
+    // 1. サークルをフェードアウト
+    if (this.hasCircleContainerTarget) {
+      this.circleContainerTarget.classList.replace("opacity-100", "opacity-0")
+    }
+
     const xKey = this.xSelectTarget.value
     const yKey = this.ySelectTarget.value
     this.updateLabels(xKey, yKey)
     this.plottedCardsTarget.innerHTML = ""
 
+    const points = []
+
     this.allPhotosValue.forEach((img, index) => {
       const item = document.createElement("div")
-      item.className = "absolute w-12 h-16 bg-cover bg-center border border-white shadow-sm transition-all duration-1000 ease-in-out"
+      item.className = "absolute w-12 h-16 bg-cover bg-center border border-white shadow-sm transition-all duration-1000 ease-out"
       item.style.backgroundImage = `url(${img.url})`
       
       const xPos = img.scores[xKey] || 50
@@ -83,36 +86,66 @@ export default class extends Controller {
       item.style.opacity = "0"
       this.plottedCardsTarget.appendChild(item)
 
+      points.push({ x: xPos, y: 100 - yPos })
+
       setTimeout(() => {
         item.style.left = `${xPos}%`
         item.style.top = `${100 - yPos}%`
         item.style.opacity = "1"
         item.style.transform = `translate(-50%, -50%)`
-      }, 50 + (index * 30))
+      }, 50 + (index * 20))
     })
 
-    this.drawStaticCircle(this.initialCxValue, this.initialCyValue)
+    // カード移動完了後にクラスター分析とフェードイン
+    setTimeout(() => this.analyzeClusters(points), 1000)
+  }
+
+  analyzeClusters(points) {
+    if (points.length === 0) return
+    const grid = Array.from({ length: 3 }, () => Array(4).fill(0))
+    points.forEach(p => {
+      const col = Math.min(Math.floor(p.x / (100 / 3)), 2)
+      const row = Math.min(Math.floor(p.y / (100 / 4)), 3)
+      grid[col][row]++
+    })
+
+    let maxCount = 0
+    let bestArea = { col: 1, row: 1 }
+    for (let c = 0; c < 3; c++) {
+      for (let r = 0; r < 4; r++) {
+        if (grid[c][r] > maxCount) {
+          maxCount = grid[c][r]
+          bestArea = { col: c, row: r }
+        }
+      }
+    }
+
+    const areaPoints = points.filter(p => {
+      const c = Math.min(Math.floor(p.x / (100 / 3)), 2)
+      const r = Math.min(Math.floor(p.y / (100 / 4)), 3)
+      return c === bestArea.col && r === bestArea.row
+    })
+
+    const avgX = areaPoints.reduce((sum, p) => sum + p.x, 0) / areaPoints.length
+    const avgY = areaPoints.reduce((sum, p) => sum + p.y, 0) / areaPoints.length
+    
+    this.drawCircle(avgX, avgY)
+    
+    // フェードイン
+    if (this.hasCircleContainerTarget) {
+      this.circleContainerTarget.classList.replace("opacity-0", "opacity-100")
+    }
   }
   
   updateLabels(xKey, yKey) {
-    // ターゲットが存在するかチェックを入れることでエラーを回避
     if (this.hasLabelXMinTarget) this.labelXMinTarget.innerText = this.labelMap[xKey][0]
-    if (this.hasLabelXMaxTarget) this.labelXMaxTarget.innerText = this.labelMap[xKey][1]
-    if (this.hasLabelYMaxTarget) this.labelYMaxTarget.innerText = this.labelMap[yKey][1]
-    if (this.hasLabelYMinTarget) this.labelYMinTarget.innerText = this.labelMap[yKey][0]
+    if (this.labelXMaxTarget) this.labelXMaxTarget.innerText = this.labelMap[xKey][1]
+    if (this.labelYMaxTarget) this.labelYMaxTarget.innerText = this.labelMap[yKey][1]
+    if (this.labelYMinTarget) this.labelYMinTarget.innerText = this.labelMap[yKey][0]
   }
 
-  drawStaticCircle(cx, cy) {
+  drawCircle(cx, cy) {
     if (!this.hasSvgTarget) return
-    this.svgTarget.innerHTML = ""
-    const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle")
-    circle.setAttribute("cx", `${cx}%`)
-    circle.setAttribute("cy", `${cy}%`)
-    circle.setAttribute("r", "15%")
-    circle.setAttribute("fill", "rgba(212, 163, 115, 0.15)")
-    circle.setAttribute("stroke", "#d4a373")
-    circle.setAttribute("stroke-width", "2")
-    circle.setAttribute("stroke-dasharray", "4,4")
-    this.svgTarget.appendChild(circle)
+    this.svgTarget.innerHTML = `<circle cx="${cx}%" cy="${cy}%" r="15%" fill="rgba(212, 163, 115, 0.2)" stroke="#d4a373" stroke-width="2" stroke-dasharray="4,4" />`
   }
 }
