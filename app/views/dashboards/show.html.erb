@@ -1,6 +1,12 @@
 <div class="min-h-screen bg-[#f9f7f2] p-8">
   <div class="max-w-6xl mx-auto">
-    <header class="flex justify-between items-center mb-12">
+    <header class="flex justify-between items-center px-10 h-[60px] flex-shrink-0">
+      <h1 class="font-[300] tracking-[4px] uppercase text-sm">
+        <%= link_to "Trait", root_path, class: "text-[#4a4a4a] no-underline" %>
+      </h1>
+    </header>
+
+    <header class="flex justify-between items-center mb-1">
       <div>
         <h1 class="text-2xl font-[300] text-[#4a4a4a] tracking-widest uppercase">My Dashboard</h1>
         <p class="text-sm text-gray-500 mt-1">こんにちは、<%= current_user.account_name %> さん</p>
@@ -8,7 +14,7 @@
       <%= link_to "ログアウト", destroy_user_session_path, data: { turbo_method: :delete }, class: "text-xs text-gray-400 hover:text-black" %>
     </header>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 py-[60px]">
       <%# 保存済みスタイル一覧 %>
       <% @my_styles.each do |style| %>
         <div class="bg-white rounded-sm shadow-sm overflow-hidden border border-black/5 flex flex-col group">
@@ -30,7 +36,7 @@
             <div class="mt-6 flex justify-between items-center pt-4 border-t border-gray-50">
               <%= link_to "View Detail", my_style_path(style), class: "text-[11px] text-[#4a4a4a] underline uppercase tracking-tighter" %>
               
-              <%# 💡 削除ボタン: data-turbo-method と confirm を使用 %>
+              <%# 削除ボタン: data-turbo-method と confirm を使用 %>
               <%= link_to "Delete", my_style_path(style), 
                   data: { turbo_method: :delete, turbo_confirm: "このスタイルを削除してもよろしいですか？" }, 
                   class: "text-[10px] text-red-300 hover:text-red-500 transition uppercase tracking-widest" %>
@@ -47,5 +53,14 @@
         <% end %>
       <% end %>
     </div>
+
+    <footer class="flex-shrink-0 py-4 text-center border-t border-black/5 text-[12px] bg-[#f9f7f2]">
+      <div class="mb-2">
+        <%= link_to "Home", root_path, class: "mx-4 text-[#333] no-underline hover:text-[#d4a373]" %>
+        <a href="#" class="mx-4 text-[#333] no-underline">利用規約</a>
+        <a href="#" class="mx-4 text-[#333] no-underline">お問い合わせ</a>
+      </div>
+      <p class="text-[10px] text-gray-400">&copy; 2026 Trait</p>
+    </footer>
   </div>
 </div>

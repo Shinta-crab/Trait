@@ -13,5 +13,8 @@ application.register("hello", HelloController)
 import SelectionController from "./selection_controller"
 application.register("selection", SelectionController)
 
+import StyleAnalysisController from "./style_analysis_controller"
+application.register("style-analysis", StyleAnalysisController)
+
 import StyleSelectionController from "./style_selection_controller"
 application.register("style-selection", StyleSelectionController)

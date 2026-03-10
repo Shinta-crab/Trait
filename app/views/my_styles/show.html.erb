@@ -1,20 +1,85 @@
-<div class="container mx-auto px-4 py-8">
-  <h1 class="text-3xl font-bold text-center mb-8"><%= @genre.name %>のスタイル診断結果</h1>
+<div class="min-h-screen bg-[#f9f7f2] flex flex-col" 
+     data-controller="style-analysis"
+     data-style-analysis-style-id-value="<%= @my_style.id %>"
+     data-style-analysis-initial-cx-value="<%= @cx %>"
+     data-style-analysis-initial-cy-value="<%= @cy %>"
+     data-style-analysis-all-photos-value="<%= @my_style.my_style_selections.includes(:photo).map { |s| { url: s.photo.display_image_url, scores: s.photo.photo_scores.joins(:axis).pluck('axes.name', :score).to_h } }.to_json %>">
 
-  <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
-    <% @selected_photos.each do |photo| %>
-      <div class="rounded-lg overflow-hidden shadow-lg bg-white">
-        <img src="<%= photo.image_path %>" class="w-full h-48 object-cover">
-        <div class="p-2 text-xs text-gray-500">
-          <%# セッションからこの写真のスコアを探して表示する例 %>
-          <% score = @selections.find { |s| s["photo_id"].to_i == photo.id } %>
-          スコア: X(<%= score["pos_x"] %>) Y(<%= score["pos_y"] %>)
+  <header class="flex justify-between items-center px-10 h-[60px] flex-shrink-0 border-b border-black/5">
+    <h1 class="font-[300] tracking-[4px] uppercase text-sm">
+      <%= link_to "Trait", root_path, class: "text-[#4a4a4a] no-underline" %>
+    </h1>
+    <%= link_to "Dashboard", user_root_path, class: "text-[10px] uppercase tracking-widest text-gray-500 hover:text-black" %>
+  </header>
+
+  <main class="container mx-auto px-6 py-12 max-w-5xl">
+    <%# --- セクション1: スタイル表示 --- %>
+    <div data-style-analysis-target="mainView">
+      <section class="text-center mb-16">
+        <span class="text-[10px] text-[#d4a373] font-bold uppercase tracking-[0.3em] mb-3 block"><%= @genre.name %> / Saved Style</span>
+        <div data-style-analysis-target="nameDisplay">
+          <h1 class="text-4xl font-[200] text-[#4a4a4a] tracking-tight mb-4"><%= @my_style.custom_name %></h1>
+          <button data-action="click->style-analysis#toggleEdit" class="text-[10px] text-gray-400 underline uppercase tracking-widest">名前を変更する</button>
         </div>
-      </div>
-    <% end %>
-  </div>
+        <div data-style-analysis-target="editInterface" class="hidden">
+          <input type="text" data-style-analysis-target="nameInput" value="<%= @my_style.custom_name %>" class="text-2xl border-b border-stone-400 bg-transparent text-center focus:outline-none mb-4">
+          <div class="flex justify-center gap-4">
+            <button data-action="click->style-analysis#updateName" class="text-[10px] text-stone-600 font-bold uppercase">Save</button>
+            <button data-action="click->style-analysis#toggleEdit" class="text-[10px] text-gray-400 uppercase">Cancel</button>
+          </div>
+        </div>
+      </section>
 
-  <div class="text-center mt-12">
-    <%= link_to "もう一度診断する", root_path, class: "bg-gray-500 text-white px-6 py-2 rounded" %>
-  </div>
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-16">
+        <% @selected_photos.each do |photo| %>
+          <div class="aspect-[3/4] bg-cover bg-center rounded-sm shadow-sm border border-black/5" style="background-image: url('<%= photo.display_image_url %>');"></div>
+        <% end %>
+      </div>
+
+      <section class="border-t border-stone-200 pt-12 text-center">
+        <button type="button" data-action="click->style-analysis#showMap" class="px-10 py-4 bg-stone-800 text-white text-[11px] uppercase tracking-[0.2em] rounded-full hover:bg-stone-700 transition">再分析する</button>
+      </section>
+    </div>
+
+    <%# --- セクション2: 4象限マップ --- %>
+    <div data-style-analysis-target="mapView" class="hidden animate-fade-in">
+      <section class="mb-10 text-center">
+        <h2 class="text-2xl font-[200] text-[#4a4a4a] mb-8 uppercase tracking-widest">Map Analysis</h2>
+        
+        <div class="flex justify-center gap-4 mb-10 text-[11px] text-[#4a4a4a]">
+          <div class="flex items-center gap-2">
+            <span>縦軸:</span>
+            <select data-action="change->style-analysis#updatePositions" data-style-analysis-target="ySelect" class="bg-transparent border-b border-[#4a4a4a] outline-none">
+              <% Axis.all.each { |a| %><option value="<%= a.name %>" <%= 'selected' if a.name == 'luxury_casual' %>><%= a.name.humanize %></option><% } %>
+            </select>
+          </div>
+          <div class="flex items-center gap-2">
+            <span>横軸:</span>
+            <select data-action="change->style-analysis#updatePositions" data-style-analysis-target="xSelect" class="bg-transparent border-b border-[#4a4a4a] outline-none">
+              <% Axis.all.each { |a| %><option value="<%= a.name %>" <%= 'selected' if a.name == 'natural_artificial' %>><%= a.name.humanize %></option><% } %>
+            </select>
+          </div>
+        </div>
+
+        <%# グリッドキャンバス %>
+        <div class="relative w-[70vw] h-[50vh] max-w-3xl mx-auto border border-black/5" 
+             style="background-image: linear-gradient(rgba(0,0,0,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.05) 1px, transparent 1px); background-size: 40px 40px;">
+          <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-30">
+            <div class="w-full h-[1px] bg-[#4a4a4a]"></div>
+            <div class="h-full w-[1px] bg-[#4a4a4a] absolute"></div>
+          </div>
+          <svg class="absolute inset-0 w-full h-full z-20" data-style-analysis-target="svg"></svg>
+          <div data-style-analysis-target="plottedCards" class="absolute inset-0 z-10"></div>
+          
+          <%# 軸ラベル %>
+          <div data-style-analysis-target="labelYMax" class="absolute -top-[30px] inset-x-0 text-[11px] font-bold"></div>
+          <div data-style-analysis-target="labelYMin" class="absolute -bottom-[30px] inset-x-0 text-[11px] font-bold"></div>
+          <div data-style-analysis-target="labelXMin" class="absolute -left-[70px] inset-y-0 w-[70px] flex items-center justify-center text-[11px] font-bold whitespace-nowrap"></div>
+          <div data-style-analysis-target="labelXMax" class="absolute -right-[70px] inset-y-0 w-[70px] flex items-center justify-center text-[11px] font-bold whitespace-nowrap"></div>
+        </div>
+
+        <button type="button" data-action="click->style-analysis#hideMap" class="mt-12 text-[11px] text-stone-400 hover:text-black underline uppercase tracking-widest">詳細に戻る</button>
+      </section>
+    </div>
+  </main>
 </div>
