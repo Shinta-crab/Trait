@@ -102,17 +102,17 @@ export default class extends Controller {
 
   analyzeClusters(points) {
     if (points.length === 0) return
-    const grid = Array.from({ length: 3 }, () => Array(4).fill(0))
+    const grid = Array.from({ length: 8 }, () => Array(6).fill(0))
     points.forEach(p => {
-      const col = Math.min(Math.floor(p.x / (100 / 3)), 2)
-      const row = Math.min(Math.floor(p.y / (100 / 4)), 3)
+      const col = Math.min(Math.floor(p.x / (100 / 8)), 7)
+      const row = Math.min(Math.floor(p.y / (100 / 6)), 5)
       grid[col][row]++
     })
 
     let maxCount = 0
-    let bestArea = { col: 1, row: 1 }
-    for (let c = 0; c < 3; c++) {
-      for (let r = 0; r < 4; r++) {
+    let bestArea = { col: 4, row: 3 }
+    for (let c = 0; c < 8; c++) {
+      for (let r = 0; r < 6; r++) {
         if (grid[c][r] > maxCount) {
           maxCount = grid[c][r]
           bestArea = { col: c, row: r }
@@ -121,8 +121,8 @@ export default class extends Controller {
     }
 
     const areaPoints = points.filter(p => {
-      const c = Math.min(Math.floor(p.x / (100 / 3)), 2)
-      const r = Math.min(Math.floor(p.y / (100 / 4)), 3)
+      const c = Math.min(Math.floor(p.x / (100 / 8)), 7)
+      const r = Math.min(Math.floor(p.y / (100 / 6)), 5)
       return c === bestArea.col && r === bestArea.row
     })
 
