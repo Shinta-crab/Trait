@@ -8,7 +8,7 @@ class GenresController < ApplicationController
   def main
     @genre = Genre.find(params[:id])
     # そのジャンルに紐づく写真をランダムに10枚選ぶ（一例）
-    @photos = @genre.photos.order("RANDOM()").limit(13)
+    @photos = @genre.photos.order("RANDOM()").limit(50)
     # 写真が100枚あったらその中から50枚を選ぶは場合はlimit 50にすればOK
   end
 end
