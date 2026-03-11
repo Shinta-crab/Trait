@@ -2,16 +2,10 @@
 
 one:
   name: MyString
-  : MyString
   icon: MyString
-  : MyString
   slug: MyString
-  : MyString
 
 two:
   name: MyString
-  : MyString
   icon: MyString
-  : MyString
   slug: MyString
-  : MyString
