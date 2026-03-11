@@ -19,8 +19,8 @@ export default class extends Controller {
       'natural_artificial': ['人工的', 'ナチュラル感'],
       'simple_detail': ['シンプル', 'ディテール'],
       'soft_solid': ['クール', '柔らかい・優しい'],
-      'tradition_modern': ['先進的', '伝統的'],
-      'chic_pop': ['ポップ', 'シック']
+      'classic_modern': ['先進的', '伝統的'],
+      'chic_pop': ['シック', 'ポップ']
     }
     // キーボード操作のイベントリスナーの設定
     this.keydownHandler = this.handleKeydown.bind(this)

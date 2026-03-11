@@ -3,7 +3,9 @@
      data-diagnostics-genre-id-value="<%= @genre.id %>">
   
   <header class="flex justify-between items-center px-10 h-[60px] flex-shrink-0">
-    <h1 class="font-[300] tracking-[4px] uppercase text-sm">Trait</h1>
+    <h1 class="font-[300] tracking-[4px] uppercase text-sm">
+      <%= link_to "Trait", root_path, class: "text-[#4a4a4a] no-underline" %>
+    </h1>
     
     <%# マッピング操作（最初は非表示） %>
     <div data-diagnostics-target="controls" class="hidden flex gap-4 text-[11px] text-[#4a4a4a]">
@@ -12,7 +14,7 @@
         <select data-action="change->diagnostics#updatePositions" data-diagnostics-target="ySelect" class="bg-transparent border-b border-[#4a4a4a] outline-none">
           <option value="natural_artificial">ナチュラル - 人工的</option>
           <option value="soft_solid" selected>柔らかい - クール</option>
-          <option value="tradition_modern">伝統的 - 先進的</option>
+          <option value="classic_modern">伝統的 - 先進的</option>
         </select>
       </div>
       <div class="flex items-center gap-2">
@@ -20,7 +22,7 @@
         <select data-action="change->diagnostics#updatePositions" data-diagnostics-target="xSelect" class="bg-transparent border-b border-[#4a4a4a] outline-none">
           <option value="luxury_casual">高級感 - 親しみやすい</option>
           <option value="simple_detail" selected>ディテール - シンプル</option>
-          <option value="chic_pop">シック - ポップ</option>
+          <option value="chic_pop">ポップ - シック</option>
         </select>
       </div>
     </div>
