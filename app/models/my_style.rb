@@ -12,5 +12,16 @@ class MyStyle < ApplicationRecord
   has_many :selected_selections, -> { where(is_selected: true) }, class_name: 'MyStyleSelection'
   has_many :selected_photos, through: :selected_selections, source: :photo
 
+  before_create :generate_public_token
+
+  private
+
+  def generate_public_token
+    # 重複を避けるためのループ処理（確実性を高める）
+    loop do
+      self.public_token = "TR-#{SecureRandom.hex(4).upcase.scan(/.{4}/).join('-')}"
+      break unless MyStyle.exists?(public_token: self.public_token)
+    end
+  end
 end
 

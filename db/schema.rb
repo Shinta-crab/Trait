@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_03_06_144807) do
+ActiveRecord::Schema[7.2].define(version: 2026_03_11_120532) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -77,8 +77,10 @@ ActiveRecord::Schema[7.2].define(version: 2026_03_06_144807) do
     t.integer "style_type", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "public_token"
     t.index ["analysis_result_id"], name: "index_my_styles_on_analysis_result_id"
     t.index ["genre_id"], name: "index_my_styles_on_genre_id"
+    t.index ["public_token"], name: "index_my_styles_on_public_token", unique: true
     t.index ["user_id"], name: "index_my_styles_on_user_id"
   end
 
