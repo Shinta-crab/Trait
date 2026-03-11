@@ -1,7 +1,7 @@
 class AnalysisResultsController < ApplicationController
   def create
     # ※ current_user が存在しない場合は User.first 等でテスト
-    target_user = current_user || User.first 
+    target_user = current_user || User.first
 
     ActiveRecord::Base.transaction do
       # 1. 分析親レコード
@@ -27,7 +27,7 @@ class AnalysisResultsController < ApplicationController
     end
 
     # 成功レスポンスと、次に移動すべきURLを返す
-    render json: { status: 'success', redirect_url: my_style_path(@my_style) }, status: :ok
+    render json: { status: "success", redirect_url: my_style_path(@my_style) }, status: :ok
   rescue => e
     render json: { error: e.message }, status: :unprocessable_entity
   end

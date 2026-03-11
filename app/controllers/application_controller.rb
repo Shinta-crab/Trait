@@ -11,7 +11,7 @@ class ApplicationController < ActionController::Base
         # 通常のブラウザアクセス（HTML）はこれまで通りログイン画面へ
         format.html { super }
         # APIアクセス（JSON）はリダイレクトせず401を返す
-        format.json { render json: { status: 'unauthorized', message: 'ログインが必要です' }, status: :unauthorized }
+        format.json { render json: { status: "unauthorized", message: "ログインが必要です" }, status: :unauthorized }
       end
     end
   end
@@ -20,8 +20,8 @@ class ApplicationController < ActionController::Base
 
   def configure_permitted_parameters
     # account_name だけでなく、email と password も明示的に許可リストに載せる
-    devise_parameter_sanitizer.permit(:sign_up, keys: [:account_name, :email, :password, :password_confirmation])
-    devise_parameter_sanitizer.permit(:account_update, keys: [:account_name, :email, :password, :password_confirmation])
+    devise_parameter_sanitizer.permit(:sign_up, keys: [ :account_name, :email, :password, :password_confirmation ])
+    devise_parameter_sanitizer.permit(:account_update, keys: [ :account_name, :email, :password, :password_confirmation ])
   end
 
   # ログイン（新規登録後の自動ログイン含む）の遷移先を指定

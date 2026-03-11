@@ -1,11 +1,11 @@
 class MyStylesController < ApplicationController
-  before_action :authenticate_user!, only: [:create, :update, :destroy, :index, :show]
+  before_action :authenticate_user!, only: [ :create, :update, :destroy, :index, :show ]
 
   # 1. プレビュー表示画面（診断直後）
   def new
     if params[:photo_ids].present?
       @genre = Genre.find(params[:genre_id])
-      @selected_photos = Photo.where(id: params[:photo_ids].split(','))
+      @selected_photos = Photo.where(id: params[:photo_ids].split(","))
       @all_photo_ids = params[:all_photo_ids]
       @cx = params[:cx]
       @cy = params[:cy]
@@ -20,11 +20,11 @@ class MyStylesController < ApplicationController
   def create
     # 念のためここでもチェック。ログインしていない場合は401を返す
     unless user_signed_in?
-      return render json: { status: 'unauthorized', message: '保存にはログインが必要です。' }, status: :unauthorized
+      return render json: { status: "unauthorized", message: "保存にはログインが必要です。" }, status: :unauthorized
     end
 
     if current_user.my_styles.count >= 5
-      return render json: { message: '保存できるスタイルは最大5件までです。不要なスタイルを削除してから保存してください。' }, status: :unprocessable_entity
+      return render json: { message: "保存できるスタイルは最大5件までです。不要なスタイルを削除してから保存してください。" }, status: :unprocessable_entity
     end
 
     ActiveRecord::Base.transaction do
@@ -41,31 +41,31 @@ class MyStylesController < ApplicationController
       )
 
       if params[:all_photo_ids].present?
-        all_ids = params[:all_photo_ids].split(',')
-        selected_ids = params[:photo_ids].to_s.split(',').map(&:to_i)
+        all_ids = params[:all_photo_ids].split(",")
+        selected_ids = params[:photo_ids].to_s.split(",").map(&:to_i)
 
         all_ids.each do |p_id|
           MyStyleSelection.create!(
             my_style: @my_style,
             photo_id: p_id,
             is_selected: selected_ids.include?(p_id.to_i),
-            pos_x: params[:cx], 
+            pos_x: params[:cx],
             pos_y: params[:cy]
           )
         end
       end
     end
 
-    render json: { status: 'success', redirect_url: user_root_path }
+    render json: { status: "success", redirect_url: user_root_path }
   rescue => e
     logger.error "MyStyle Save Error: #{e.message}"
-    render json: { status: 'error', message: e.message }, status: :unprocessable_entity
+    render json: { status: "error", message: e.message }, status: :unprocessable_entity
   end
 
   # 3. 保存済みスタイルの詳細表示 (再分析用のデータ取得)
   def show
     @my_style = current_user.my_styles.includes(my_style_selections: :photo).find(params[:id])
-    
+
     @genre = @my_style.genre
     @selections = @my_style.my_style_selections
     @selected_photos = @my_style.selected_photos # has_many through (is_selected: true)
@@ -76,16 +76,16 @@ class MyStylesController < ApplicationController
     @cx = first_selection&.pos_x
     @cy = first_selection&.pos_y
     # 全てのLike済み写真のID（再分析で使用）
-    @all_photo_ids = @selections.map(&:photo_id).join(',')
+    @all_photo_ids = @selections.map(&:photo_id).join(",")
   end
 
   # 4. スタイル名の更新 (追加)
   def update
     @my_style = current_user.my_styles.find(params[:id])
     if @my_style.update(my_style_params)
-      render json: { status: 'success', custom_name: @my_style.custom_name }
+      render json: { status: "success", custom_name: @my_style.custom_name }
     else
-      render json: { status: 'error', message: @my_style.errors.full_messages.join(", ") }, status: :unprocessable_entity
+      render json: { status: "error", message: @my_style.errors.full_messages.join(", ") }, status: :unprocessable_entity
     end
   end
 

@@ -8,7 +8,7 @@ class User < ApplicationRecord
   has_many :liked_photos, through: :likes, source: :photo
   has_many :analysis_results, dependent: :destroy
   has_many :my_styles, dependent: :destroy
-  
+
   # アカウント名のバリデーションを追加
   validates :account_name, presence: true, uniqueness: true
 
