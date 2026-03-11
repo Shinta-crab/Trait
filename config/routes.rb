@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get "pages/terms"
   get "genres/index"
   get "top/index"
   get '/dashboard', to: 'dashboards#show', as: :user_root 
@@ -30,6 +31,9 @@ Rails.application.routes.draw do
   # 5. マイスタイル表示のためルーティング
   resources :my_styles, only: [:new, :create, :show, :index, :destroy, :update]
 
+  # 利用規約へのルート
+  get '/terms', to: 'pages#terms', as: :terms
+  
   # 以下、Rails標準の設定
   get "up" => "rails/health#show", as: :rails_health_check
   get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
