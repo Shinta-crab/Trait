@@ -1,11 +1,11 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  name: MyString
+  name: "Action"
   icon: MyString
-  slug: MyString
+  slug: "action"
 
 two:
-  name: MyString
+  name: "Comedy"
   icon: MyString
-  slug: MyString
+  slug: "comedy"
