@@ -2,6 +2,10 @@
 
 one:
   name: "X-Axis"
-  
+  label_min: "Min"
+  label_max: "Max"
+
 two:
   name: "Y-Axis"
+  label_min: "Min"
+  label_max: "Max"
