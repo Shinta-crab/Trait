@@ -5,6 +5,7 @@
 # below each fixture, per the syntax in the comments below
 #
 one:
+  id: 1
   email: "test@example.com"
   account_name: "testuser"
   encrypted_password: "password"

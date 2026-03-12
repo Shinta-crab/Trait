@@ -2,12 +2,5 @@
 
 one:
   genre: one
-  main_style: one
-  image_path: MyString
-  is_representative: false
+  image_path: "test.jpg"
 
-two:
-  genre: two
-  main_style: two
-  image_path: MyString
-  is_representative: false
