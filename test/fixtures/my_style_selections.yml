@@ -4,8 +4,8 @@
 # model remove the "{}" from the fixture names and add the columns immediately
 # below each fixture, per the syntax in the comments below
 #
-one: 
-  my_style : one
-#
-two:
-  my_style: two
+one:
+  my_style: one
+  photo: one
+  pos_x: 0
+  pos_y: 0

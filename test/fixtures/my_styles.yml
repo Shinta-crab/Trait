@@ -4,10 +4,14 @@
 # model remove the "{}" from the fixture names and add the columns immediately
 # below each fixture, per the syntax in the comments below
 #
-one: 
-  id: 1
-  name: "Cool Style"
-#
+one:
+  user: one
+  genre: one
+  analysis_result: one
+  custom_name: "My Cool Style"
+  
 two:
-  id: 2
-  name: "Soft Style"
+  user: one
+  genre: one
+  analysis_result: one
+  custom_name: "Another Style"
