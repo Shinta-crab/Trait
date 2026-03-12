@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: "X-Axis"
+  label_min: "Min"
+  label_max: "Max"
+
+two:
+  name: "Y-Axis"
+  label_min: "Min"
+  label_max: "Max"

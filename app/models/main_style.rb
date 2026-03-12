@@ -1,0 +1,2 @@
+class MainStyle < ApplicationRecord
+end

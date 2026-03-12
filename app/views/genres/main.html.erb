@@ -1,0 +1,118 @@
+<div id="app" class="min-h-screen flex flex-col bg-[#f9f7f2]" 
+     data-controller="diagnostics" 
+     data-diagnostics-genre-id-value="<%= @genre.id %>">
+  
+  <header class="flex justify-between items-center px-10 h-[60px] flex-shrink-0">
+    <h1 class="font-[300] tracking-[4px] uppercase text-sm">
+      <%= link_to "Trait", root_path, class: "text-[#4a4a4a] no-underline" %>
+    </h1>
+    
+    <%# マッピング操作（最初は非表示） %>
+    <div data-diagnostics-target="controls" class="hidden flex gap-4 text-[11px] text-[#4a4a4a]">
+      <div class="flex items-center gap-2">
+        <span>縦軸:</span>
+        <select data-action="change->diagnostics#updatePositions" data-diagnostics-target="ySelect" class="bg-transparent border-b border-[#4a4a4a] outline-none">
+          <option value="natural_artificial">ナチュラル - 人工的</option>
+          <option value="soft_solid" selected>柔らかい - クール</option>
+          <option value="classic_modern">伝統的 - 先進的</option>
+        </select>
+      </div>
+      <div class="flex items-center gap-2">
+        <span>横軸:</span>
+        <select data-action="change->diagnostics#updatePositions" data-diagnostics-target="xSelect" class="bg-transparent border-b border-[#4a4a4a] outline-none">
+          <option value="luxury_casual">高級感 - 親しみやすい</option>
+          <option value="simple_detail" selected>ディテール - シンプル</option>
+          <option value="chic_pop">ポップ - シック</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <%# --- スワイプセクション --- %>
+  <section data-diagnostics-target="swipeSection" class="flex-grow flex flex-col justify-center py-10">
+    <div class="section-header text-center mb-8 max-w-[700px] mx-auto px-5">
+      <span class="block text-[11px] tracking-[0.25em] text-[#d4a373] uppercase font-bold mb-2 italic">Step 02</span>
+      <h2 class="text-2xl font-[300] text-[#4a4a4a] mb-2">自分の好きを見つけよう</h2>
+      <p class="text-sm text-gray-400">直感で好き嫌いに振り分けてください。</p>
+    </div>
+    
+    <div class="swipe-container flex justify-center items-center relative min-h-[50vh]">
+      
+      <%# --- 左三角形ボタン (Dislike) --- %>
+      <button data-action="click->diagnostics#dislike" 
+              class="triangle-btn left relative w-0 h-0 border-t-[50px] border-t-transparent border-b-[50px] border-b-transparent border-r-[70px] border-r-[#e0e0e0] cursor-pointer mx-10 hover:border-r-gray-400 transition-colors">
+        <span class="symbol absolute top-1/2 left-[35px] -translate-x-1/2 -translate-y-1/2 text-2xl z-10 text-white font-bold">✕</span>
+      </button>
+
+      <div class="card-deck relative w-[280px] h-[420px] bg-white shadow-xl rounded-[4px]" data-diagnostics-target="deck">
+        <% @photos.each_with_index do |photo, index| %>
+          <div class="card absolute inset-0 bg-cover bg-center rounded-[4px] transition-all duration-400 opacity-0 pointer-events-none"
+               data-diagnostics-target="card"
+               data-id="<%= photo.id %>"
+               data-image-url="<%= photo.display_image_url %>"
+               data-scores='<%= photo.photo_scores.map { |ps| [ps.axis.name, ps.score] }.to_h.to_json %>'>
+          </div>
+        <% end %>
+      </div>
+
+      <%# --- 右三角形ボタン (Like) --- %>
+      <button data-action="click->diagnostics#like" 
+              class="triangle-btn right relative w-0 h-0 border-t-[50px] border-t-transparent border-b-[50px] border-b-transparent border-l-[70px] border-l-[#d4a373] cursor-pointer mx-10 hover:opacity-80 transition-opacity">
+        <span class="symbol absolute top-1/2 -left-[35px] -translate-x-1/2 -translate-y-1/2 text-2xl z-10 text-white">♥</span>
+      </button>
+    </div>
+    <p class="guide-text text-center text-[10px] text-gray-400 mt-8 tracking-widest uppercase">← Dislike (左キー) | Like (右キー) →</p>
+  </section>
+
+  <%# --- マッピングセクション --- %>
+  <section data-diagnostics-target="mappingSection" class="hidden flex-grow flex flex-col justify-center py-10">
+    <div class="section-header text-center mb-10 max-w-[700px] mx-auto px-5">
+      <span class="block text-[11px] tracking-[0.25em] text-[#d4a373] uppercase font-bold mb-2 italic">Step 03</span>
+      <h2 class="text-2xl font-[300] text-[#4a4a4a] mb-2">好きの輪郭を確認する</h2>
+      <p class="text-sm text-gray-400">配置された画像があなたの好みの分布です。<br>サークル（塊）をクリックして、スタイルを確定させましょう。</p>
+    </div>
+
+    <%# --- グリッドキャンバス --- %>
+    <div class="grid-canvas relative w-[70vw] h-[50vh] mx-auto border border-black/5" 
+         style="background-image: linear-gradient(rgba(0,0,0,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.05) 1px, transparent 1px); background-size: 40px 40px;">
+      
+      <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-30">
+        <div class="w-full h-[1px] bg-[#4a4a4a]"></div>
+        <div class="h-full w-[1px] bg-[#4a4a4a] absolute"></div>
+      </div>
+      
+      <%# 修正点：pointer-events-none を削除。z-indexを調整 %>
+      <svg class="absolute inset-0 w-full h-full z-20" data-diagnostics-target="svg"></svg>
+      <div data-diagnostics-target="plottedCards" class="absolute inset-0 z-10"></div>
+      
+      <%# ラベル類 %>
+      <div class="absolute inset-x-0 -top-[30px] h-[30px] flex items-center justify-center">
+        <div data-diagnostics-target="labelYMax" class="font-bold text-[13px] text-[#4a4a4a] bg-[#f9f7f2]/80 px-2 py-1 rounded"></div>
+      </div>
+      <div class="absolute inset-x-0 -bottom-[30px] h-[30px] flex items-center justify-center">
+        <div data-diagnostics-target="labelYMin" class="font-bold text-[13px] text-[#4a4a4a] bg-[#f9f7f2]/80 px-2 py-1 rounded"></div>
+      </div>
+      <div class="absolute inset-y-0 -left-[70px] w-[70px] flex items-center justify-center">
+        <div data-diagnostics-target="labelXMin" class="font-bold text-[13px] text-[#4a4a4a] bg-[#f9f7f2]/80 px-2 py-1 rounded whitespace-nowrap"></div>
+      </div>
+      <div class="absolute inset-y-0 -right-[70px] w-[70px] flex items-center justify-center">
+        <div data-diagnostics-target="labelXMax" class="font-bold text-[13px] text-[#4a4a4a] bg-[#f9f7f2]/80 px-2 py-1 rounded whitespace-nowrap"></div>
+      </div>
+    </div>
+
+    <%# <div class="actions text-center mt-12 pb-10"> %>
+      <%# <button class="primary-btn px-12 py-4 bg-[#4a4a4a] text-white tracking-widest text-sm hover:translate-y-[-2px] transition-all rounded-[2px]"> %>
+        <%# このスタイルを詳しく見る %>
+      <%# </button> %>
+    <%# </div> %>
+  </section>
+
+  <footer class="py-4 text-center border-t border-black/5 text-[10px] text-gray-400 mt-auto">
+    <div class="footer-links mb-1 text-[#333]">
+        <%= link_to "Home", root_path, class: "mx-3 hover:underline" %>
+        <%= link_to "利用規約", terms_path, class: "mx-4 text-[#333] no-underline hover:text-[#d4a373]" %>
+        <%# <a href="#" class="mx-3 hover:underline">お問い合わせ</a> %>
+    </div>
+    <p>&copy; 2026 Trait</p>
+  </footer>
+</div>

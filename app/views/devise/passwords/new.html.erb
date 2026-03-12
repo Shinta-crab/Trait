@@ -1,0 +1,51 @@
+<div class="min-h-screen bg-[#f9f7f2] flex flex-col">
+  <%# ヘッダー %>
+  <header class="flex justify-between items-center px-10 h-[60px] flex-shrink-0">
+    <h1 class="font-[300] tracking-[4px] uppercase text-sm">
+      <%= link_to "Trait", root_path, class: "text-[#4a4a4a] no-underline" %>
+    </h1>
+  </header>
+
+  <%# 認証コンテナ %>
+  <main class="flex-grow flex items-center justify-center px-4 py-12">
+    <div class="bg-white p-10 rounded-[4px] shadow-[0_4px_20px_rgba(0,0,0,0.05)] w-full max-w-[400px]">
+      
+      <h2 class="text-xl font-[300] text-[#4a4a4a] mb-4 text-center tracking-wider">Reset Password</h2>
+      <p class="text-[11px] text-gray-500 text-center mb-8 leading-relaxed">
+        ご登録済みのメールアドレスを入力してください。<br>
+        パスワード再設定用のURLをお送りします。
+      </p>
+
+      <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
+        <%= render "devise/shared/error_messages", resource: resource %>
+
+        <%# メールアドレス入力 %>
+        <div class="mb-8">
+          <%= f.label :email, "Email Address", class: "block text-[12px] mb-1.5 text-[#4a4a4a] tracking-wider uppercase" %>
+          <%= f.email_field :email, autofocus: true, autocomplete: "email", placeholder: "email@example.com",
+              class: "w-full p-3 border border-[#ddd] rounded-[4px] text-sm focus:outline-none focus:border-[#4a4a4a] transition-colors" %>
+        </div>
+
+        <%# 送信ボタン %>
+        <div class="actions">
+          <%= f.submit "再設定メールを送信", class: "w-full py-4 bg-[#4a4a4a] text-white text-[14px] tracking-[1px] cursor-pointer hover:opacity-90 transition-all rounded-[2px] font-bold" %>
+        </div>
+      <% end %>
+
+      <%# フッターリンク：ログイン画面へ戻る %>
+      <div class="mt-8 pt-6 border-t border-gray-100 text-center text-xs text-gray-500">
+        <%= link_to "ログイン画面に戻る", new_session_path(resource_name), class: "text-[#4a4a4a] hover:text-[#d4a373] transition-colors" %>
+      </div>
+    </div>
+  </main>
+
+  <%# フッター %>
+  <footer class="flex-shrink-0 py-4 text-center border-t border-black/5 text-[12px] bg-[#f9f7f2]">
+    <div class="mb-2">
+      <%= link_to "Home", root_path, class: "mx-4 text-[#333] no-underline hover:text-[#d4a373]" %>
+      <a href="#" class="mx-4 text-[#333] no-underline">利用規約</a>
+      <a href="#" class="mx-4 text-[#333] no-underline">お問い合わせ</a>
+    </div>
+    <p class="text-[10px] text-gray-400">&copy; 2026 Trait</p>
+  </footer>
+</div>

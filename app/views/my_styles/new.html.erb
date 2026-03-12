@@ -1,0 +1,58 @@
+<div class="min-h-screen bg-[#f9f7f2] flex flex-col" 
+     data-controller="style-selection" 
+     data-style-selection-authenticated-value="<%= user_signed_in? %>"
+     data-style-selection-photo-ids-value="<%= params[:photo_ids] %>" 
+     data-style-selection-all-photo-ids-value="<%= params[:all_photo_ids] %>" 
+     data-style-selection-genre-id-value="<%= params[:genre_id] %>"
+     data-style-selection-cx-value="<%= params[:cx] %>"
+     data-style-selection-cy-value="<%= params[:cy] %>"
+     data-style-selection-x-axis-value="<%= params[:x_axis] %>"
+     data-style-selection-y-axis-value="<%= params[:y_axis] %>">
+     
+  <header class="flex justify-between items-center px-10 h-[60px] flex-shrink-0">
+    <h1 class="font-[300] tracking-[4px] uppercase text-sm">
+      <%= link_to "Trait", root_path, class: "text-[#4a4a4a] no-underline" %>
+    </h1>
+  </header>
+
+  <main id="selection-container" class="container mx-auto px-4 py-8">
+    <section class="summary-header text-center mb-10">
+      <span class="block text-[11px] tracking-[0.25em] text-[#d4a373] uppercase font-bold mb-2 italic">Step 04</span>
+      <h2 class="text-2xl font-[300] text-[#4a4a4a] mb-2">あなたのスタイルに名前をつける</h2>
+      <p class="text-sm text-gray-400">抽出された画像から、あなたの理想を言語化しましょう。</p>
+      
+      <div class="naming-form mt-6 max-w-md mx-auto">
+        <%# 🆕 Targetを指定 %>
+        <input type="text" 
+               data-style-selection-target="nameInput" 
+               class="w-full border-b-2 border-stone-300 py-2 text-center focus:border-stone-500 outline-none bg-transparent" 
+               placeholder="例：落ち着きのある北欧モダン">
+      </div>
+    </section>
+
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+      <% @selected_photos.each do |photo| %>
+        <div class="aspect-[3/4] bg-cover bg-center rounded-sm shadow-sm border border-black/5" 
+             style="background-image: url('<%= photo.display_image_url %>');"></div>
+      <% end %>
+    </div>
+
+    <div class="final-actions text-center">
+      <%# Actionを指定 %>
+      <button type="button"
+              data-action="click->style-selection#save" 
+              class="bg-stone-800 text-white px-8 py-3 rounded-full hover:bg-stone-700 transition">
+        このスタイルをマイページに保存
+      </button>
+    </div>
+  </main>
+
+  <footer class="flex-shrink-0 py-4 text-center border-t border-black/5 text-[12px] bg-[#f9f7f2] mt-auto">
+    <div class="mb-2">
+      <%= link_to "Home", root_path, class: "mx-4 text-[#333] no-underline hover:text-[#d4a373]" %>
+      <%= link_to "利用規約", terms_path, class: "mx-4 text-[#333] no-underline hover:text-[#d4a373]" %>
+      <%# <a href="#" class="mx-4 text-[#333] no-underline">お問い合わせ</a> %>
+    </div>
+    <p class="text-[10px] text-gray-400">&copy; 2026 Trait</p>
+  </footer>
+</div>
