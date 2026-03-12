@@ -8,13 +8,18 @@
       Trait
     </h1>
     <p class="text-lg md:text-xl text-[#333] font-light tracking-widest leading-loose mb-12">
-      言葉にできない「好き」を、<br>
-      <span class="font-normal border-b border-[#d4a373] pb-1">一本の線（Trait）</span>に。
+      『なんとなく好き』を、確かに<span class="font-normal border-b border-[#d4a373] pb-1">カタチ（Trait）</span>に。<br>
+      あなたの感性を可視化するインテリア分析ツール。
     </p>
 
     <div class="flex flex-col items-center space-y-8">
-      <%= link_to "#", class: "text-[#4a4a4a] text-sm tracking-widest underline underline-offset-8 hover:text-[#d4a373] transition-colors duration-300" do %>
-        アカウント作成せずに試す
+      <% if user_signed_in? %>
+        <div class="text-[#4a4a4a] text-sm tracking-widest underline underline-offset-8 hover:text-[#d4a373] transition-colors duration-300">
+        </div>
+      <% else %>
+        <%= link_to genres_path, class: "text-[#4a4a4a] text-sm tracking-widest underline underline-offset-8 hover:text-[#d4a373] transition-colors duration-300" do %>
+          アカウント作成せずに試す
+        <% end %>
       <% end %>
 
       <div class="flex flex-col sm:flex-row gap-4 items-center">
