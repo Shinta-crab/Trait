@@ -9,9 +9,4 @@ one:
   genre: one
   analysis_result: one
   custom_name: "My Cool Style"
-  
-two:
-  user: one
-  genre: one
-  analysis_result: one
-  custom_name: "Another Style"
+
