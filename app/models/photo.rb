@@ -6,26 +6,39 @@ class Photo < ApplicationRecord
   has_many :likes, dependent: :destroy
   has_many :photo_scores, dependent: :destroy
 
-  # MVP仕様: DBのimage_pathをAsset PipelineのURLに変換する
+  has_one_attached :image
+
   def display_image_url
+    # 1. Active Storageに画像が添付されているか確認
+    if image.attached?
+      # Active StorageのURLを返す
+      return Rails.application.routes.url_helpers.rails_blob_path(image, only_path: true)
+    end
+    
+    # 2. なければ従来の image_path ロジックを実行
     return nil if image_path.blank?
 
-    # DB内の image_path が "living/image0.jpeg" であることを前提に、
-    # ActionControllerのヘルパーを使用して、
-    # Railsのアセットパスに変換します。
-    begin
-      ActionController::Base.helpers.asset_path(image_path)
-    rescue
-      # 見つからない場合、拡張子を入れ替えて再トライしてみる
-      alternative_path = image_path.include?(".jpeg") ? image_path.gsub(".jpeg", ".jpg") : image_path.gsub(".jpg", ".jpeg")
+    # 3. 候補となるパスのリストを作成する
+    # 例: ["living/image0.jpeg", "living/image0.jpg"]
+    paths = [image_path]
+    if image_path.include?(".jpeg")
+      paths << image_path.gsub(".jpeg", ".jpg")
+    elsif image_path.include?(".jpg")
+      paths << image_path.gsub(".jpg", ".jpeg")
+    end
 
+    paths.each do |path|
       begin
-        ActionController::Base.helpers.asset_path(alternative_path)
+        # アセットが存在するかチェック（存在しなければ例外が発生する）
+        return ActionController::Base.helpers.asset_path(path)
       rescue
-        # 両方ダメなら諦めてログを出す
-        Rails.logger.error "【画像未検出】: #{image_path} も #{alternative_path} も見つかりませんでした。"
-        nil
+        # なかったら次のパスを試す
+        next
       end
     end
+
+    # 5. 全てダメだった場合
+    Rails.logger.error "【画像未検出】: 候補 #{paths.join(', ')} は全て見つかりませんでした。"
+    nil
   end
 end
