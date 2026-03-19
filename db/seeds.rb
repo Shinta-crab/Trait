@@ -1,5 +1,3 @@
-# db/seeds.rb
-
 # 1. ジャンルの作成
 # 変数名を genres_data に統一
 genres_data = [
@@ -95,10 +93,27 @@ photo_list = [
 ]
 
 photo_list.each do |path, scores|
+  # 既存のパスをキーにして Photo を取得・作成
   photo = Photo.find_or_create_by!(
     image_path: path,
     genre: living
   )
+
+  # 画像の添付処理
+  unless photo.image.attached?
+    image_path_in_assets = Rails.root.join("app/assets/images", path)
+    
+    if File.exist?(image_path_in_assets)
+      photo.image.attach(
+        io: File.open(image_path_in_assets),
+        filename: File.basename(path),
+        content_type: "image/jpeg"
+      )
+      puts "【成功】画像を添付しました: #{path}"
+    else
+      puts "【警告】画像ファイルが見つかりません: #{image_path_in_assets}"
+    end
+  end
 
   scores.each do |axis_name, value|
     axis = axes_map[axis_name]

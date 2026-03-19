@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  devise_for :admin_users
   get "pages/terms"
   get "genres/index"
   get "top/index"
