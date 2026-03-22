@@ -1,5 +1,22 @@
 Rails.application.routes.draw do
+  namespace :admin do
+      resources :admin_users
+      resources :analysis_results
+      resources :axes
+      resources :genres
+      resources :likes
+      resources :main_styles
+      resources :my_styles
+      resources :my_style_selections
+      resources :photos
+      resources :photo_scores
+      resources :users
+
+      root to: "admin_users#index"
+    end
+
   devise_for :admin_users
+  
   get "pages/terms"
   get "genres/index"
   get "top/index"
