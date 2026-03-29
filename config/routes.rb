@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  ## 1. 認証系を一番上に（最優先）
+  devise_for :admin_users
+  devise_for :users
+
   namespace :admin do
       resources :admin_users
       resources :analysis_results
@@ -15,8 +19,6 @@ Rails.application.routes.draw do
       root to: "admin_users#index"
     end
 
-  devise_for :admin_users
-  
   get "pages/terms"
   get "genres/index"
   get "top/index"
@@ -24,9 +26,6 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   root "top#index"
-
-  # 1. ユーザー認証関連 (Devise)
-  devise_for :users
 
   # 2. ジャンル選択ページ
   # 「/genres」にアクセスした時にジャンル一覧が出るようにします
