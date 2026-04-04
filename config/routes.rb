@@ -4,20 +4,20 @@ Rails.application.routes.draw do
   devise_for :users
 
   namespace :admin do
-      resources :admin_users
-      resources :analysis_results
-      resources :axes
-      resources :genres
-      resources :likes
-      resources :main_styles
-      resources :my_styles
-      resources :my_style_selections
-      resources :photos
-      resources :photo_scores
-      resources :users
+    resources :admin_users
+    resources :analysis_results
+    resources :axes
+    resources :genres
+    resources :likes
+    resources :main_styles
+    resources :my_styles
+    resources :my_style_selections
+    resources :photos
+    resources :photo_scores
+    resources :users
 
-      root to: "admin_users#index"
-    end
+    root to: "admin_users#index"
+  end
 
   get "pages/terms"
   get "genres/index"
