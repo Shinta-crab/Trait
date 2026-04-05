@@ -13,6 +13,12 @@ class GenreDashboard < Administrate::BaseDashboard
     name: Field::String,
     photos: Field::HasMany,
     slug: Field::String,
+    # enum用の設定：モデルから選択肢（keys）を取得して状態を
+    # 新規追加してもその追加した状態もプルダウンで表示できるようにする
+    status: Field::Select.with_options(
+      collection: Genre.statuses.keys,
+      searchable: false
+    ),
     created_at: Field::DateTime,
     updated_at: Field::DateTime,
   }.freeze
@@ -27,6 +33,7 @@ class GenreDashboard < Administrate::BaseDashboard
     icon
     name
     photos
+    status
   ].freeze
 
   # SHOW_PAGE_ATTRIBUTES
@@ -35,6 +42,7 @@ class GenreDashboard < Administrate::BaseDashboard
     id
     icon
     name
+    status
     photos
     slug
     created_at
@@ -49,6 +57,7 @@ class GenreDashboard < Administrate::BaseDashboard
     name
     photos
     slug
+    status
   ].freeze
 
   # COLLECTION_FILTERS
@@ -69,4 +78,9 @@ class GenreDashboard < Administrate::BaseDashboard
   # def display_resource(genre)
   #   "Genre ##{genre.id}"
   # end
+  # 管理画面全体で「ジャンル」をどう表示するかを定義。
+  # 写真の編集画面などで「どのジャンルか」を選ぶ際に名前が表示されるようにする
+   def display_resource(genre)
+    genre.name
+   end
 end
