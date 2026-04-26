@@ -10,15 +10,20 @@ class PhotoDashboard < Administrate::BaseDashboard
   ATTRIBUTE_TYPES = {
     id: Field::Number,
     genre: Field::BelongsTo,
-    image_attachment: Field::HasOne,
-    image_blob: Field::HasOne,
-    image_path: Field::String,
+    # この Gem の機能（プレビュー等）をフル活用します
+    image: Field::ActiveStorage.with_options(
+      show_display_preview: true,
+      index_display_preview: true,
+      index_preview_size: [100, 100],
+      show_preview_size: [400, 400]
+    ),
+    photo_scores: Field::HasMany, 
     is_representative: Field::Boolean,
-    likes: Field::HasMany,
     main_style: Field::BelongsTo,
-    photo_scores: Field::HasMany,
+    likes: Field::HasMany,
     created_at: Field::DateTime,
     updated_at: Field::DateTime,
+    image_path: Field::String,
   }.freeze
 
   # COLLECTION_ATTRIBUTES
@@ -28,23 +33,22 @@ class PhotoDashboard < Administrate::BaseDashboard
   # Feel free to add, remove, or rearrange items.
   COLLECTION_ATTRIBUTES = %i[
     id
+    image
     genre
-    image_attachment
-    image_blob
+    is_representative
   ].freeze
 
   # SHOW_PAGE_ATTRIBUTES
   # an array of attributes that will be displayed on the model's show page.
   SHOW_PAGE_ATTRIBUTES = %i[
     id
+    image
     genre
-    image_attachment
-    image_blob
-    image_path
     is_representative
-    likes
     main_style
     photo_scores
+    likes
+    image_path
     created_at
     updated_at
   ].freeze
@@ -54,11 +58,8 @@ class PhotoDashboard < Administrate::BaseDashboard
   # on the model's form (`new` and `edit`) pages.
   FORM_ATTRIBUTES = %i[
     genre
-    image_attachment
-    image_blob
-    image_path
+    image
     is_representative
-    likes
     main_style
     photo_scores
   ].freeze
@@ -78,7 +79,8 @@ class PhotoDashboard < Administrate::BaseDashboard
   # Overwrite this method to customize how photos are displayed
   # across all pages of the admin dashboard.
   #
-  # def display_resource(photo)
-  #   "Photo ##{photo.id}"
-  # end
+   # リソースの表示名（他画面でのセレクトボックス等用）
+  def display_resource(photo)
+    "Photo ##{photo.id}" #(#{photo.genre.name})"
+  end
 end

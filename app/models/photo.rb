@@ -6,6 +6,9 @@ class Photo < ApplicationRecord
   has_many :likes, dependent: :destroy
   has_many :photo_scores, dependent: :destroy
 
+  # Photo経由でPhotoScoreを作成・更新・削除できるようにする
+  accepts_nested_attributes_for :photo_scores, allow_destroy: true
+
   has_one_attached :image
 
   def display_image_url
