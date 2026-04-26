@@ -29,7 +29,14 @@
                 </div>
                 
                 <%# Style Type バッジ (Solo/Duo/Trio) %>
-                <div class="px-2 py-1 bg-white/90 text-black text-[9px] font-bold uppercase tracking-widest border border-black/10">
+                <%
+                  badge_color = case style.style_type
+                                when "Solo" then "bg-white"
+                                when "Duo"  then "bg-amber-50"
+                                when "Trio" then "bg-indigo-50"
+                                end
+                %>
+                <div class="px-2 py-1 <%= badge_color %> text-black text-[9px] font-bold uppercase tracking-widest border border-black/10">
                   <%= style.style_type %>
                 </div>
               </div>
