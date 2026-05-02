@@ -17,7 +17,11 @@ class PhotoDashboard < Administrate::BaseDashboard
       index_preview_size: [100, 100],
       show_preview_size: [400, 400]
     ),
-    photo_scores: Field::HasMany, 
+    # Field::HasMany から Field::NestedHasMany に変更
+    photo_scores: Field::NestedHasMany.with_options(
+      skip: :photo, # PhotoScore側の photo 選択欄は不要なので隠す
+      limit: 6      # 最大6つまで
+    ),
     is_representative: Field::Boolean,
     main_style: Field::BelongsTo,
     likes: Field::HasMany,

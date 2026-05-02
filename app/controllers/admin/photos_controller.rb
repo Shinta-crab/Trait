@@ -1,5 +1,6 @@
 module Admin
   class PhotosController < Admin::ApplicationController
+    before_action :build_photo_scores, only: [:new, :edit]
     # Overwrite any of the RESTful controller actions to implement custom behavior
     # For example, you may want to send an email after a foo is updated.
     #
@@ -41,6 +42,19 @@ module Admin
           photo_scores_attributes: [:id, :axis_id, :score, :_destroy]
         )
         # transform_values { |value| value == "" ? nil : value }
+    end
+
+    private
+
+    def build_photo_scores
+      # 全ての軸を取得
+      axes = Axis.all
+      # 存在しない軸のスコアをビルドする
+      axes.each do |axis|
+        unless requested_resource.photo_scores.exists?(axis_id: axis.id)
+          requested_resource.photo_scores.build(axis_id: axis.id)
+        end
+      end
     end
 
     # See https://administrate-demo.herokuapp.com/customizing_controller_actions
