@@ -20,7 +20,7 @@ class GenreDashboard < Administrate::BaseDashboard
       searchable: false
     ),
     created_at: Field::DateTime,
-    updated_at: Field::DateTime,
+    updated_at: Field::DateTime
   }.freeze
 
   # COLLECTION_ATTRIBUTES
@@ -72,14 +72,14 @@ class GenreDashboard < Administrate::BaseDashboard
   #   }.freeze
   COLLECTION_FILTERS = {}.freeze
 
-  # Overwrite this method to customize how genres are displayed
-  # across all pages of the admin dashboard.
-  #
-  # def display_resource(genre)
-  #   "Genre ##{genre.id}"
-  # end
-  # 管理画面全体で「ジャンル」をどう表示するかを定義。
-  # 写真の編集画面などで「どのジャンルか」を選ぶ際に名前が表示されるようにする
+   # Overwrite this method to customize how genres are displayed
+   # across all pages of the admin dashboard.
+   #
+   # def display_resource(genre)
+   #   "Genre ##{genre.id}"
+   # end
+   # 管理画面全体で「ジャンル」をどう表示するかを定義。
+   # 写真の編集画面などで「どのジャンルか」を選ぶ際に名前が表示されるようにする
    def display_resource(genre)
     genre.name
    end

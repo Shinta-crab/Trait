@@ -15,7 +15,7 @@ class MyStyleSelectionDashboard < Administrate::BaseDashboard
     pos_x: Field::Number,
     pos_y: Field::Number,
     created_at: Field::DateTime,
-    updated_at: Field::DateTime,
+    updated_at: Field::DateTime
   }.freeze
 
   # COLLECTION_ATTRIBUTES

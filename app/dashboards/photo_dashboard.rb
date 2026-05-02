@@ -14,8 +14,8 @@ class PhotoDashboard < Administrate::BaseDashboard
     image: Field::ActiveStorage.with_options(
       show_display_preview: true,
       index_display_preview: true,
-      index_preview_size: [100, 100],
-      show_preview_size: [400, 400]
+      index_preview_size: [ 100, 100 ],
+      show_preview_size: [ 400, 400 ]
     ),
     # Field::HasMany から Field::NestedHasMany に変更
     photo_scores: Field::NestedHasMany.with_options(
@@ -27,7 +27,7 @@ class PhotoDashboard < Administrate::BaseDashboard
     likes: Field::HasMany,
     created_at: Field::DateTime,
     updated_at: Field::DateTime,
-    image_path: Field::String,
+    image_path: Field::String
   }.freeze
 
   # COLLECTION_ATTRIBUTES
@@ -83,8 +83,8 @@ class PhotoDashboard < Administrate::BaseDashboard
   # Overwrite this method to customize how photos are displayed
   # across all pages of the admin dashboard.
   #
-   # リソースの表示名（他画面でのセレクトボックス等用）
+  # リソースの表示名（他画面でのセレクトボックス等用）
   def display_resource(photo)
-    "Photo ##{photo.id}" #(#{photo.genre.name})"
+    "Photo ##{photo.id}" # (#{photo.genre.name})"
   end
 end

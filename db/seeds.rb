@@ -102,7 +102,7 @@ photo_list.each do |path, scores|
   # 画像の添付処理
   unless photo.image.attached?
     image_path_in_assets = Rails.root.join("app/assets/images", path)
-    
+
     if File.exist?(image_path_in_assets)
       photo.image.attach(
         io: File.open(image_path_in_assets),

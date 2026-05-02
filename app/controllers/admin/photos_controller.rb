@@ -1,6 +1,6 @@
 module Admin
   class PhotosController < Admin::ApplicationController
-    before_action :build_photo_scores, only: [:new, :edit]
+    before_action :build_photo_scores, only: [ :new, :edit ]
     # Overwrite any of the RESTful controller actions to implement custom behavior
     # For example, you may want to send an email after a foo is updated.
     #
@@ -39,9 +39,9 @@ module Admin
       params.require(resource_class.model_name.param_key).
         permit(dashboard.permitted_attributes(action_name),
           # ここでネストされたスコアの保存を許可します
-          photo_scores_attributes: [:id, :axis_id, :score, :_destroy]
+          photo_scores_attributes: [ :id, :axis_id, :score, :_destroy ]
         )
-        # transform_values { |value| value == "" ? nil : value }
+      # transform_values { |value| value == "" ? nil : value }
     end
 
     private

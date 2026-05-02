@@ -22,14 +22,14 @@ class ApplicationController < ActionController::Base
     # resource_class (AdminUser か User か) に応じて許可するキーを分ける
     if resource_class == AdminUser
       # 管理者のログインには email と password を許可
-      devise_parameter_sanitizer.permit(:sign_in, keys: [:email, :password])
+      devise_parameter_sanitizer.permit(:sign_in, keys: [ :email, :password ])
     else
       # 一般ユーザーのログインには account_name を使用（以前の設定に合わせる）
-      devise_parameter_sanitizer.permit(:sign_in, keys: [:account_name, :password])
-      
+      devise_parameter_sanitizer.permit(:sign_in, keys: [ :account_name, :password ])
+
       # サインアップと更新の許可設定
-      devise_parameter_sanitizer.permit(:sign_up, keys: [:account_name, :email, :password, :password_confirmation])
-      devise_parameter_sanitizer.permit(:account_update, keys: [:account_name, :email, :password, :password_confirmation])
+      devise_parameter_sanitizer.permit(:sign_up, keys: [ :account_name, :email, :password, :password_confirmation ])
+      devise_parameter_sanitizer.permit(:account_update, keys: [ :account_name, :email, :password, :password_confirmation ])
     end
   end
 

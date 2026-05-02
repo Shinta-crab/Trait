@@ -17,13 +17,13 @@ class Photo < ApplicationRecord
       # Active StorageのURLを返す
       return Rails.application.routes.url_helpers.rails_blob_path(image, only_path: true)
     end
-    
+
     # 2. なければ従来の image_path ロジックを実行
     return nil if image_path.blank?
 
     # 3. 候補となるパスのリストを作成する
     # 例: ["living/image0.jpeg", "living/image0.jpg"]
-    paths = [image_path]
+    paths = [ image_path ]
     if image_path.include?(".jpeg")
       paths << image_path.gsub(".jpeg", ".jpg")
     elsif image_path.include?(".jpg")

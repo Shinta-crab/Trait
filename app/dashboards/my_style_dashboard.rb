@@ -20,7 +20,7 @@ class MyStyleDashboard < Administrate::BaseDashboard
     style_type: Field::Number,
     user: Field::BelongsTo,
     created_at: Field::DateTime,
-    updated_at: Field::DateTime,
+    updated_at: Field::DateTime
   }.freeze
 
   # COLLECTION_ATTRIBUTES

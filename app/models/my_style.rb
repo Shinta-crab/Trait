@@ -13,7 +13,7 @@ class MyStyle < ApplicationRecord
   has_many :selected_photos, through: :selected_selections, source: :photo
 
   # style_typeの定義
-  enum :style_type, { Solo: 0 , Duo: 1, Trio: 2}
+  enum :style_type, { Solo: 0, Duo: 1, Trio: 2 }
 
   before_create :generate_public_token
 

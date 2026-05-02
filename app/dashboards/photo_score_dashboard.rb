@@ -13,7 +13,7 @@ class PhotoScoreDashboard < Administrate::BaseDashboard
     photo: Field::BelongsTo,
     score: Field::Number,
     created_at: Field::DateTime,
-    updated_at: Field::DateTime,
+    updated_at: Field::DateTime
   }.freeze
 
   # COLLECTION_ATTRIBUTES
