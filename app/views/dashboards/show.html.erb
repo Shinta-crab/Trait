@@ -20,8 +20,26 @@
         <div class="bg-white rounded-sm shadow-sm overflow-hidden border border-black/5 flex flex-col group">
           <% first_photo = style.selected_photos.first %>
           <% if first_photo %>
-            <div class="aspect-[4/3] bg-cover bg-center" style="background-image: url('<%= first_photo.display_image_url %>')">
-              <div class="m-2 inline-block px-2 py-1 bg-black/50 text-white text-[9px] uppercase tracking-widest"><%= style.genre.name %></div>
+            <div class="aspect-[4/3] bg-cover bg-center relative" style="background-image: url('<%= first_photo.display_image_url %>')">
+              <%# 左上のラベルエリア %>
+              <div class="absolute top-2 left-2 flex gap-1">
+                <%# ジャンル名 %>
+                <div class="px-2 py-1 bg-black/50 text-white text-[9px] uppercase tracking-widest">
+                  <%= style.genre.name %>
+                </div>
+                
+                <%# Style Type バッジ (Solo/Duo/Trio) %>
+                <%
+                  badge_color = case style.style_type
+                                when "Solo" then "bg-white"
+                                when "Duo"  then "bg-amber-50"
+                                when "Trio" then "bg-indigo-50"
+                                end
+                %>
+                <div class="px-2 py-1 <%= badge_color %> text-black text-[9px] font-bold uppercase tracking-widest border border-black/10">
+                  <%= style.style_type %>
+                </div>
+              </div>
             </div>
           <% else %>
             <div class="aspect-[4/3] bg-stone-200 flex items-center justify-center text-stone-400">No Image</div>

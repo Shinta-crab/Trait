@@ -21,8 +21,11 @@
     <%# ジャンルグリッド %>
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
       <% @genres.each do |genre| %>
-        <% if genre.slug == 'living' %>
-          <%# リビングの場合：リンク有効 %>
+        <%# status が hidden（非公開）の場合は、カード自体を表示しない %>
+        <% next if genre.hidden? %>
+
+        <% if genre.open? %>
+          <%# 公開中(open)の場合：リンク有効 %>
           <%= link_to main_genre_path(genre), class: "group bg-white border border-[#e5e0d8] p-10 flex flex-col items-center rounded-[2px] transition-all duration-400 ease-[cubic-bezier(0.165,0.84,0.44,1)] hover:-translate-y-1.5 hover:border-[#d4a373] hover:shadow-[0_10px_30px_rgba(0,0,0,0.03)]" do %>
             <div class="text-[32px] mb-[15px] opacity-80 group-hover:scale-110 transition-transform">
               <%= genre.icon %>
@@ -34,8 +37,9 @@
               <%= genre.name %>
             </span>
           <% end %>
-        <% else %>
-          <%# それ以外の場合：グレーアウト＆メンテナンス中表示 %>
+
+        <% elsif genre.maintenance? %>
+          <%# メンテナンス中(maintenance)の場合：グレーアウト %>
           <div class="relative bg-white border border-[#e5e0d8] p-10 flex flex-col items-center rounded-[2px] opacity-60 grayscale cursor-not-allowed">
             <div class="absolute inset-0 flex flex-col items-center justify-center bg-white/60 z-10">
               <span class="bg-stone-800 text-white text-[10px] px-3 py-1 tracking-widest uppercase">メンテナンス中</span>
@@ -60,7 +64,6 @@
     <div class="mb-2">
       <%= link_to "Home", root_path, class: "mx-4 text-[#333] no-underline hover:text-[#d4a373]" %>
       <%= link_to "利用規約", terms_path, class: "mx-4 text-[#333] no-underline hover:text-[#d4a373]" %>
-      <%# <a href="#" class="mx-4 text-[#333] no-underline">お問い合わせ</a> %>
     </div>
     <p class="text-[10px] text-gray-400">&copy; 2026 Trait</p>
   </footer>
