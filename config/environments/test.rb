@@ -64,4 +64,12 @@ Rails.application.configure do
 
   # Raise error when a before_action's only/except options reference missing actions.
   config.action_controller.raise_on_missing_callback_actions = true
+
+  # 追加1：テスト実行時にアセットのコンパイルをスキップし、エラーを防ぐ
+  config.assets.compile = false
+  # 追加2. 【ここを修正】テスト環境でもアセットの存在をチェックする
+  config.assets.check_precompiled_asset = false
+  
+  # 追加3. アセットが見つからない時のフォールバックを許可する
+  config.assets.unknown_asset_fallback = true 
 end

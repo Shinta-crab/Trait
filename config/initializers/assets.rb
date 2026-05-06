@@ -6,6 +6,9 @@ Rails.application.config.assets.version = "1.0"
 # Add additional assets to the asset load path.
 # Rails.application.config.assets.paths << Emoji.images_path
 
+# Tailwind CSS v4 が出力する builds フォルダをアセットの検索パスに追加
+Rails.application.config.assets.paths << Rails.root.join("app/assets/builds")
+
 # Precompile additional assets.
 # application.js, application.css, and all non-JS/CSS in the app/assets
 # folder are already added.
