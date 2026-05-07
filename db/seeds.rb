@@ -1,3 +1,8 @@
+AdminUser.find_or_create_by!(email: 'adminuser@example.com') do |admin|
+  admin.password = 'traittrait' # 任意のパスワード
+  admin.password_confirmation = 'traittrait'
+end
+
 # 1. ジャンルの作成
 # 変数名を genres_data に統一
 genres_data = [
